@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">XianBicycle</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="type_a_place">Type A Place</string>
+    <string name="no_result">No Result</string>
+    <string name="error">Error~Retrying</string>
+</resources>
