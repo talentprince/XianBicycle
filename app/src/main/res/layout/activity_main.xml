@@ -8,20 +8,25 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity">
 
-
     <EditText
         android:id="@+id/query"
-        android:imeOptions="actionSearch"
-        android:singleLine="true"
-        android:hint="@string/type_a_place"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:hint="@string/type_a_place"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"/>
 
     <ListView
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/query"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

@@ -5,9 +5,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
     EditText query;
     @InjectView(R.id.result)
     ListView result;
+    @InjectView(R.id.progress)
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void query() {
+        showProgress();
         Fetcher fetcher = new Fetcher();
         Search search = new Search(query.getText().toString());
         fetcher.getData(search).subscribe(new Action1<List<BicycleData>>() {
@@ -59,11 +64,13 @@ public class MainActivity extends ActionBarActivity {
                 } else {
                     result.setAdapter(new DataAdapter(MainActivity.this, data));
                 }
+                hideProgress();
             }
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
                 Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                hideProgress();
             }
         });
     }
@@ -90,5 +97,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+    }
 
 }
