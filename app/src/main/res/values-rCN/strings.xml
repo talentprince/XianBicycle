@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">西安公共自行车查询</string>
 
-    <string name="action_settings">Settings</string>
     <string name="type_a_place">输入地点</string>
     <string name="error">出错啦, 重新试试</string>
     <string name="no_result">查无结果</string>
+    <string name="ur_location">您的位置:%1$s</string>
+    <string name="get_ur_location">定位中...</string>
+    <string name="action_about">关于</string>
 </resources>
