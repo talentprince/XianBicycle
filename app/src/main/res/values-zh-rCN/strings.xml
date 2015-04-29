@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">西安公共自行车查询</string>
+    <string name="app_name">西安公共自行车</string>
 
     <string name="type_a_place">输入地点</string>
     <string name="error">出错啦, 重新试试</string>
