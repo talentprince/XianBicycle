@@ -7,4 +7,5 @@
     <string name="error">Error~Retrying</string>
     <string name="ur_location">Your Location:%1$s</string>
     <string name="get_ur_location">Get Your Location...</string>
+    <string name="version" translatable="false">A Weyoung App Version: %1$s</string>
 </resources>

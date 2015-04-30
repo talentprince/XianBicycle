@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -32,7 +33,8 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import rx.functions.Action1;
 
-public class SearchFragment extends Fragment{
+public class SearchFragment extends ToolbarFragment{
+    public static final String TAG = SearchFragment.class.getSimpleName();
 
     @InjectView(R.id.query)
     EditText query;
@@ -50,6 +52,7 @@ public class SearchFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.inject(this, view);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -70,15 +73,15 @@ public class SearchFragment extends Fragment{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        locationClient.start();
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         locationClient.stop();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_about).setVisible(true);
     }
 
     private void query() {
@@ -110,6 +113,7 @@ public class SearchFragment extends Fragment{
 
     @OnClick(R.id.location)
     void onLocationClick() {
+        locationClient.start();
         if (locationClient != null && locationClient.isStarted()) {
             locationClient.requestLocation();
         }
@@ -133,10 +137,12 @@ public class SearchFragment extends Fragment{
 
         locationClient = new LocationClient(getActivity());
         locationClient.setLocOption(option);
+        locationClient.start();
 
         locationClient.registerLocationListener(new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation location) {
+                locationClient.stop();
                 if (location == null)
                     return;
                 String format = String.format(Locale.US, getString(R.string.ur_location), location.getAddrStr());
