@@ -1,10 +1,10 @@
 package org.weyoung.xianbicycle.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -47,12 +47,13 @@ public class SearchFragment extends ToolbarFragment{
 
     private LocationClient locationClient;
     private LocationClientOption option;
+    private boolean isLocationSearch;
+    private DataAdapter dataAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.inject(this, view);
-        setHasOptionsMenu(true);
         return view;
     }
 
@@ -63,19 +64,14 @@ public class SearchFragment extends ToolbarFragment{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    query();
+                    query(new Search(query.getText().toString()));
                 }
                 return false;
             }
         });
 
+        setHasOptionsMenu(true);
         initLocation();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        locationClient.stop();
     }
 
     @Override
@@ -84,17 +80,17 @@ public class SearchFragment extends ToolbarFragment{
         menu.findItem(R.id.action_about).setVisible(true);
     }
 
-    private void query() {
+    private void query(Search search) {
         showProgress();
         Fetcher fetcher = new Fetcher();
-        Search search = new Search(query.getText().toString());
         fetcher.getData(search).subscribe(new Action1<List<BicycleData>>() {
             @Override
             public void call(List<BicycleData> data) {
                 if (data.size() == 0) {
                     Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_SHORT).show();
                 } else {
-                    result.setAdapter(new DataAdapter(getActivity(), data));
+                    dataAdapter = new DataAdapter(getActivity(), data);
+                    result.setAdapter(dataAdapter);
                 }
                 hideProgress();
             }
@@ -111,19 +107,21 @@ public class SearchFragment extends ToolbarFragment{
     void onResultItemClick(int index) {
     }
 
-    @OnClick(R.id.location)
-    void onLocationClick() {
+    @OnClick(R.id.location_search)
+    void onLocationSearchClick() {
+        isLocationSearch = true;
+        if (dataAdapter != null)
+            dataAdapter.clear();
         locationClient.start();
-        if (locationClient != null && locationClient.isStarted()) {
-            locationClient.requestLocation();
-        }
     }
 
     private void showProgress() {
+        query.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     private void hideProgress() {
+        query.setEnabled(true);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -147,6 +145,11 @@ public class SearchFragment extends ToolbarFragment{
                     return;
                 String format = String.format(Locale.US, getString(R.string.ur_location), location.getAddrStr());
                 locationHeader.setText(format);
+
+                if (isLocationSearch) {
+                    query(new Search(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())));
+                    isLocationSearch = false;
+                }
             }
         });
     }

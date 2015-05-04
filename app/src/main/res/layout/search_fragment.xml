@@ -15,11 +15,21 @@
         android:gravity="center"
         android:text="@string/get_ur_location"/>
 
+    <ImageView
+        android:id="@+id/location_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/query"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/location"
+        android:src="@drawable/location"/>
+
     <EditText
         android:id="@+id/query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/location"
+        android:layout_toLeftOf="@+id/location_search"
         android:hint="@string/type_a_place"
         android:imeOptions="actionSearch"
         android:singleLine="true"/>
