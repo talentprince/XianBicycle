@@ -1,51 +1,61 @@
 package org.weyoung.xianbicycle;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.widget.TextView;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
 import org.weyoung.xianbicycle.ui.SearchFragment;
 
+import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+
+public class MainActivity extends BaseActivity {
+    @InjectView(R.id.version)
+    TextView version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, new SearchFragment()).commit();
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                invalidateOptionsMenu();
-                supportInvalidateOptionsMenu();
-            }
-        });
+        setContentView(R.layout.main_layout);
+        ButterKnife.inject(this);
+
+        String format = String.format(Locale.US, getString(R.string.version), BuildConfig.VERSION_NAME);
+        version.setText(format);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
+    protected void goToNavDrawerItem(int item) {
+        switch (item) {
+            case NAVDRAWER_ITEM_ABOUT:
+                Fragment about = getFragment(AboutFragment.TAG);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_fragment, about, AboutFragment.TAG)
+                        .commit();
+                break;
+            case NAVDRAWER_ITEM_SEARCH:
+                Fragment search = getFragment(SearchFragment.TAG);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_fragment, search, SearchFragment.TAG)
+                        .commit();
+                break;
+            case NAVDRAWER_ITEM_BOOKMARK:
+                break;
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_about) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new AboutFragment()).addToBackStack(AboutFragment.TAG).commit();
-            return true;
-        } else if (id == android.R.id.home) {
-            if (!getSupportFragmentManager().popBackStackImmediate()) {
-                finish();
+    private Fragment getFragment(String tag) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("");
+        if (fragment == null) {
+            if (tag.equals(AboutFragment.TAG)) {
+                fragment = new AboutFragment();
+            } else if (tag.equals(SearchFragment.TAG)) {
+                fragment = new SearchFragment();
             }
         }
-
-        return super.onOptionsItemSelected(item);
+        return fragment;
     }
-
 }

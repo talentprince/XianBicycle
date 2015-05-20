@@ -5,21 +5,11 @@
                 android:background="@android:color/white"
                 tools:context=".MainActivity">
 
-    <include layout="@layout/toolbar"/>
-
     <TextView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:autoLink="web"/>
-
-    <TextView
-        android:id="@+id/version"
-        style="@style/TextAppearance.AppCompat.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"/>
 
 </RelativeLayout>

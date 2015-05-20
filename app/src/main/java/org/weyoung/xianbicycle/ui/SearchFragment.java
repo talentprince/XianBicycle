@@ -1,10 +1,9 @@
 package org.weyoung.xianbicycle.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -33,7 +32,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import rx.functions.Action1;
 
-public class SearchFragment extends ToolbarFragment{
+public class SearchFragment extends Fragment{
     public static final String TAG = SearchFragment.class.getSimpleName();
 
     @InjectView(R.id.query)
@@ -70,14 +69,7 @@ public class SearchFragment extends ToolbarFragment{
             }
         });
 
-        setHasOptionsMenu(true);
         initLocation();
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_about).setVisible(true);
     }
 
     private void query(Search search) {
