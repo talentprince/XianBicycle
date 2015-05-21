@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -141,8 +142,13 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 locationClient.stop();
                 if (location == null)
                     return;
-                String format = String.format(Locale.US, getString(R.string.ur_location), location.getAddrStr());
-                locationHeader.setText(format);
+                String addrStr = location.getAddrStr();
+                if (TextUtils.isEmpty(addrStr)) {
+                    locationHeader.setText(R.string.location_failed);
+                } else {
+                    String format = String.format(Locale.US, getString(R.string.ur_location), addrStr);
+                    locationHeader.setText(format);
+                }
 
                 if (isLocationSearch) {
                     query(new Search(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())));

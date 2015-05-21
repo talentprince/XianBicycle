@@ -12,4 +12,5 @@
     <string name="navdrawer_item_search">Search</string>
     <string name="navdrawer_item_bookmark">Bookmark</string>
     <string name="bookmark_number">You have saved %1$s bicycle sites</string>
+    <string name="location_failed">Whoops~ get location failed</string>
 </resources>
