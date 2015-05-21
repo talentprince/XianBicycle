@@ -90,6 +90,10 @@ public class BookmarkFragment extends Fragment {
                     hideProgress();
                 }
             }).load(new Search(bookmark));
+        } else if (dataAdapter != null){
+            dataAdapter.clear();
+            dataAdapter.notifyDataSetChanged();
         }
     }
+
 }

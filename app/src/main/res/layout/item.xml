@@ -41,7 +41,10 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_action_bookmark"
         android:layout_centerVertical="true"
-        android:padding="@dimen/bookmark_padding"
+        android:paddingLeft="@dimen/bookmark_padding_left"
+        android:paddingRight="@dimen/bookmark_padding_right"
+        android:paddingTop="@dimen/bookmark_padding_vertical"
+        android:paddingBottom="@dimen/bookmark_padding_vertical"
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

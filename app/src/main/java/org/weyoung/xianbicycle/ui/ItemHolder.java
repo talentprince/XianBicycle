@@ -32,7 +32,9 @@ public class ItemHolder {
         name.setText(data.getSitename());
         status.setText(String.format(Locale.US, "(%s/%s)", data.getEmptynum(), data.getLocknum()));
         location.setText(data.getLocation());
-        setBookmark(bookmarkList.contains(data.getSiteid()));
+        boolean selected = bookmarkList.contains(data.getSiteid());
+        setBookmark(selected);
+        bookmark.setSelected(selected);
         bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,8 @@
 package org.weyoung.xianbicycle.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,7 +34,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
-public class SearchFragment extends Fragment{
+
+public class SearchFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
 
     @InjectView(R.id.query)
@@ -53,6 +56,7 @@ public class SearchFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.inject(this, view);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
         return view;
     }
 
@@ -146,5 +150,13 @@ public class SearchFragment extends Fragment{
                 }
             }
         });
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (dataAdapter != null) {
+            dataAdapter.setBookmarkList(BookmarkUtil.getAll(getActivity()));
+            dataAdapter.notifyDataSetChanged();
+        }
     }
 }

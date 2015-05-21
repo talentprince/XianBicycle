@@ -23,6 +23,10 @@ public class DataAdapter extends ArrayAdapter<BicycleData> {
         this.bookmarkList = bookmarkList;
     }
 
+    public void setBookmarkList(List<String> bookmarkList) {
+        this.bookmarkList = bookmarkList;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         BicycleData data = getItem(position);
