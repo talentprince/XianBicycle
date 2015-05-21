@@ -4,17 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
-import org.weyoung.xianbicycle.BuildConfig;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.utils.FileUtil;
-
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,7 +21,7 @@ public class AboutFragment extends Fragment{
     public static final String TAG = AboutFragment.class.getSimpleName();
 
     @InjectView(R.id.about)
-    TextView about;
+    WebView about;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,8 +33,7 @@ public class AboutFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Spanned log = Html.fromHtml(FileUtil.readRawTextFile(getActivity(), R.raw.log));
-        about.setText(log);
+        about.loadUrl("file:///android_res/raw/log");
     }
 
 }

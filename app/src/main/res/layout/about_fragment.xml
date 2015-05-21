@@ -5,11 +5,10 @@
                 android:background="@android:color/white"
                 tools:context=".MainActivity">
 
-    <TextView
+    <WebView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:autoLink="web"/>
+        android:layout_below="@+id/toolbar"/>
 
 </RelativeLayout>
