@@ -20,8 +20,9 @@ import com.baidu.location.LocationClientOption;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
-import org.weyoung.xianbicycle.net.Fetcher;
+import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.net.Search;
+import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +31,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import rx.functions.Action1;
 
 public class SearchFragment extends Fragment{
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -73,26 +73,28 @@ public class SearchFragment extends Fragment{
     }
 
     private void query(Search search) {
-        showProgress();
-        Fetcher fetcher = new Fetcher();
-        fetcher.getData(search).subscribe(new Action1<List<BicycleData>>() {
+        new Loader(new Loader.Callback() {
             @Override
-            public void call(List<BicycleData> data) {
+            public void onLoaderStarted() {
+                showProgress();
+            }
+            @Override
+            public void onLoaderFinished(List<BicycleData> data) {
                 if (data.size() == 0) {
                     Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_SHORT).show();
                 } else {
-                    dataAdapter = new DataAdapter(getActivity(), data);
+                    dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
                     result.setAdapter(dataAdapter);
                 }
                 hideProgress();
             }
-        }, new Action1<Throwable>() {
+
             @Override
-            public void call(Throwable throwable) {
+            public void onLoaderFailed() {
                 Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
                 hideProgress();
             }
-        });
+        }).load(search);
     }
 
     @OnItemClick(R.id.result)

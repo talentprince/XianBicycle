@@ -1,9 +1,13 @@
 package org.weyoung.xianbicycle.net;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Search {
     String term;
     String lat;
     String lng;
+    List<String> ids;
 
     public Search(String s) {
         term = s;
@@ -12,6 +16,11 @@ public class Search {
     public Search(String lat, String lng) {
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public Search(List<String> ids) {
+        this.ids = new ArrayList<>();
+        this.ids.addAll(ids);
     }
 
     public String getTerm() {

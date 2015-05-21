@@ -20,7 +20,7 @@
     android:layout_width="@dimen/navdrawer_width"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@color/bg_white"
+    android:background="@color/real_white"
     android:fillViewport="true"
     android:scrollbars="none"
     android:fitsSystemWindows="true">
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom">
+            android:gravity="bottom">
 
             <TextView
                 android:id="@+id/version"

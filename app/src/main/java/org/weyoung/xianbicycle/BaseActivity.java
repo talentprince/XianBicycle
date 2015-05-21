@@ -268,10 +268,10 @@ public class BaseActivity extends AppCompatActivity {
         // configure its appearance according to whether or not it's selected
         titleView.setTextColor(selected ?
                 getResources().getColor(R.color.theme_primary) :
-                getResources().getColor(R.color.bg_dark));
+                getResources().getColor(R.color.real_dark));
         iconView.setColorFilter(selected ?
                 getResources().getColor(R.color.theme_primary) :
-                getResources().getColor(R.color.bg_dark));
+                getResources().getColor(R.color.real_dark));
     }
 
     private void onNavDrawerItemClicked(final int itemId) {

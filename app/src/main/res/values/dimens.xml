@@ -6,4 +6,6 @@
     <dimen name="item_padding">6dp</dimen>
     <dimen name="navdrawer_width">260dp</dimen>
     <dimen name="nav_item_padding">16dp</dimen>
+    <dimen name="bookmark">15dp</dimen>
+    <dimen name="bookmark_padding">15dp</dimen>
 </resources>
