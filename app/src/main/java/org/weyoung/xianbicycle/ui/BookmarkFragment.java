@@ -63,6 +63,9 @@ public class BookmarkFragment extends Fragment {
     }
 
     private void refreshBookmark() {
+        if (null == getActivity()) {
+            return;
+        }
         List<String> bookmark = BookmarkUtil.getAll(getActivity());
         summaryView.setText(String.format(Locale.US, getResources().getString(R.string.bookmark_number), bookmark.size()));
 
