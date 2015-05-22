@@ -8,5 +8,11 @@
     <string name="get_ur_location">定位中...</string>
     <string name="action_about">关于</string>
     <string name="bookmark_number">您已收藏了%1$s个公共自行车站点</string>
+    <string name="navdrawer_item_about">关于</string>
+    <string name="navdrawer_item_search">查找</string>
+    <string name="navdrawer_item_bookmark">收藏</string>
     <string name="location_failed">哎呀,定位失败啦</string>
+    <string name="route_plan_failed">路径规划失败啦</string>
+    <string name="from_place">起点</string>
+
 </resources>

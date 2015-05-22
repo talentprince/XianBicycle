@@ -111,10 +111,12 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="rxandroid-0.24.0" level="project" />
+    <orderEntry type="library" exported="" name="android_api_1.1_forsdk" level="project" />
     <orderEntry type="library" exported="" name="rxjava-1.0.8" level="project" />
     <orderEntry type="library" exported="" name="okio-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.2.0" level="project" />
     <orderEntry type="library" exported="" name="butterknife-6.0.0" level="project" />
+    <orderEntry type="library" exported="" name="galaxy_mini" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="BaiduLBS_Android" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />

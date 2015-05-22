@@ -1,5 +1,6 @@
 package org.weyoung.xianbicycle.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,8 +22,10 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
+import org.weyoung.xianbicycle.MapActivity;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.Place;
 import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.net.Search;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
@@ -104,6 +107,21 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
 
     @OnItemClick(R.id.result)
     void onResultItemClick(int index) {
+        BicycleData bicycleData = dataAdapter.getItem(index);
+        BDLocation lastKnownLocation = locationClient.getLastKnownLocation();
+        if (lastKnownLocation == null) {
+            Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
+            locationClient.start();
+            return;
+        }
+        Intent intent = new Intent(getActivity(), MapActivity.class);
+        intent.putExtra(MapActivity.FROM,
+                new Place(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
+                lastKnownLocation.getAddrStr(), getString(R.string.from_place)));
+        intent.putExtra(MapActivity.TO,
+                new Place(Integer.valueOf(bicycleData.getLatitude()), Integer.valueOf(bicycleData.getLongitude()), bicycleData.getSitename(),
+                        getString(R.id.to_place)));
+        startActivity(intent);
     }
 
     @OnClick(R.id.location_search)
