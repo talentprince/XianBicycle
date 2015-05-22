@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
+import org.weyoung.xianbicycle.BuildConfig;
 import org.weyoung.xianbicycle.MapActivity;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
@@ -160,6 +162,9 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 locationClient.stop();
                 if (location == null)
                     return;
+                if (BuildConfig.DEBUG) {
+                    Log.e(TAG, "loc type " + location.getLocType());
+                }
                 String addrStr = location.getAddrStr();
                 if (TextUtils.isEmpty(addrStr)) {
                     locationHeader.setText(R.string.location_failed);
