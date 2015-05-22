@@ -159,21 +159,23 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         locationClient.registerLocationListener(new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation location) {
-                locationClient.stop();
-                if (location == null)
-                    return;
-                lastKnownLocation = location;
-                String addrStr = location.getAddrStr();
-                if (TextUtils.isEmpty(addrStr)) {
-                    locationHeader.setText(R.string.location_failed);
-                } else {
-                    String format = String.format(Locale.US, getString(R.string.ur_location), addrStr);
-                    locationHeader.setText(format);
-                }
+                if (isAdded() && getActivity() != null) {
+                    locationClient.stop();
+                    if (location == null)
+                        return;
+                    lastKnownLocation = location;
+                    String addrStr = location.getAddrStr();
+                    if (TextUtils.isEmpty(addrStr)) {
+                        locationHeader.setText(R.string.location_failed);
+                    } else {
+                        String format = String.format(Locale.US, getString(R.string.ur_location), addrStr);
+                        locationHeader.setText(format);
+                    }
 
-                if (isLocationSearch) {
-                    query(new Search(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())));
-                    isLocationSearch = false;
+                    if (isLocationSearch) {
+                        query(new Search(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())));
+                        isLocationSearch = false;
+                    }
                 }
             }
         });
