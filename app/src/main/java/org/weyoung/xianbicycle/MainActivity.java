@@ -7,6 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.navisdk.BaiduNaviManager;
+import com.tencent.stat.StatConfig;
+import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
 import org.weyoung.xianbicycle.ui.BookmarkFragment;
@@ -39,6 +41,9 @@ public class MainActivity extends BaseActivity {
         initAllFragment();
 
         initBaiduNaviEngine();
+
+        StatConfig.setDebugEnable(true);
+        StatService.trackCustomEvent(this, "welcome", "welcome");
     }
 
     @Override
