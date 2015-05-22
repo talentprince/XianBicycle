@@ -1,6 +1,7 @@
 package org.weyoung.xianbicycle.utils;
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -22,5 +23,13 @@ public class FileUtil {
             e.printStackTrace();
         }
         return stringBuffer.toString();
+    }
+
+    public static String getSdcardDir() {
+        if (Environment.getExternalStorageState().equalsIgnoreCase(
+                Environment.MEDIA_MOUNTED)) {
+            return Environment.getExternalStorageDirectory().toString();
+        }
+        return null;
     }
 }

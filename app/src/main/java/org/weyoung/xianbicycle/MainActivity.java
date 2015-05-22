@@ -4,10 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baidu.navisdk.BaiduNaviManager;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
 import org.weyoung.xianbicycle.ui.BookmarkFragment;
 import org.weyoung.xianbicycle.ui.SearchFragment;
+import org.weyoung.xianbicycle.utils.CoachUtil;
+import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;
 
@@ -32,6 +37,20 @@ public class MainActivity extends BaseActivity {
         version.setText(format);
 
         initAllFragment();
+
+        initBaiduNaviEngine();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (CoachUtil.isFirstLaunch(this)) {
+            Toast.makeText(this, R.string.tips, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void initBaiduNaviEngine() {
+        BaiduNaviManager.getInstance().initEngine(this, FileUtil.getSdcardDir(), null, null);
     }
 
     @Override

@@ -1,12 +1,10 @@
 package org.weyoung.xianbicycle.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,14 +21,13 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
-import org.weyoung.xianbicycle.BuildConfig;
-import org.weyoung.xianbicycle.MapActivity;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
 import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.net.Search;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
+import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +54,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     private LocationClientOption option;
     private boolean isLocationSearch;
     private DataAdapter dataAdapter;
+    private BDLocation lastKnownLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,6 +78,14 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         initLocation();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (locationClient != null) {
+            locationClient.start();
+        }
     }
 
     private void query(Search search) {
@@ -110,20 +116,14 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     @OnItemClick(R.id.result)
     void onResultItemClick(int index) {
         BicycleData bicycleData = dataAdapter.getItem(index);
-        BDLocation lastKnownLocation = locationClient.getLastKnownLocation();
         if (lastKnownLocation == null) {
             Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
             locationClient.start();
             return;
         }
-        Intent intent = new Intent(getActivity(), MapActivity.class);
-        intent.putExtra(MapActivity.FROM,
-                new Place(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(),
-                lastKnownLocation.getAddrStr(), getString(R.string.from_place)));
-        intent.putExtra(MapActivity.TO,
-                new Place(Integer.valueOf(bicycleData.getLatitude()), Integer.valueOf(bicycleData.getLongitude()), bicycleData.getSitename(),
-                        getString(R.id.to_place)));
-        startActivity(intent);
+        NavigationUtil.launchNavigator(getActivity(),
+                new Place(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), lastKnownLocation.getAddrStr()),
+                new Place(Double.valueOf(bicycleData.getLatitude()), Double.valueOf(bicycleData.getLongitude()), bicycleData.getSitename()));
     }
 
     @OnClick(R.id.location_search)
@@ -152,7 +152,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         option.setIsNeedAddress(true);
         option.setNeedDeviceDirect(true);
 
-        locationClient = new LocationClient(getActivity());
+        locationClient = new LocationClient(getActivity().getApplicationContext());
         locationClient.setLocOption(option);
         locationClient.start();
 
@@ -162,9 +162,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 locationClient.stop();
                 if (location == null)
                     return;
-                if (BuildConfig.DEBUG) {
-                    Log.e(TAG, "loc type " + location.getLocType());
-                }
+                lastKnownLocation = location;
                 String addrStr = location.getAddrStr();
                 if (TextUtils.isEmpty(addrStr)) {
                     locationHeader.setText(R.string.location_failed);

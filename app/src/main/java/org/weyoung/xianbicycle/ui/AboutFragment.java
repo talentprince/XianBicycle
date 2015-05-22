@@ -2,17 +2,12 @@ package org.weyoung.xianbicycle.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import org.weyoung.xianbicycle.R;
-import org.weyoung.xianbicycle.utils.FileUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,7 +28,8 @@ public class AboutFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        about.loadUrl("file:///android_res/raw/log");
+        about.getSettings().setDefaultTextEncodingName("utf-8");
+        about.loadUrl("file:///android_asset/log");
     }
 
 }

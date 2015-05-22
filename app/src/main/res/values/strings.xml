@@ -13,9 +13,10 @@
     <string name="navdrawer_item_bookmark">Bookmark</string>
     <string name="bookmark_number">You have saved %1$s bicycle sites</string>
     <string name="location_failed">Whoops~ get location failed</string>
-    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_map">NavigatorActivity</string>
     <string name="route_plan_failed">Route plan failed</string>
     <string name="from_place">From</string>
+    <string name="tips">Tap bicycle result will lead to a navigation ^_^</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
