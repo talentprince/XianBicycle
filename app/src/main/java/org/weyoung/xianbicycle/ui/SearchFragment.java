@@ -54,7 +54,6 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     private LocationClientOption option;
     private boolean isLocationSearch;
     private DataAdapter dataAdapter;
-    private BDLocation lastKnownLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,13 +115,12 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     @OnItemClick(R.id.result)
     void onResultItemClick(int index) {
         BicycleData bicycleData = dataAdapter.getItem(index);
-        if (lastKnownLocation == null) {
+        if (NavigationUtil.getLastKnown() == null) {
             Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
             locationClient.start();
             return;
         }
         NavigationUtil.launchNavigator(getActivity(),
-                new Place(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), lastKnownLocation.getAddrStr()),
                 new Place(Double.valueOf(bicycleData.getLatitude()), Double.valueOf(bicycleData.getLongitude()), bicycleData.getSitename()));
     }
 
@@ -163,7 +161,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                     locationClient.stop();
                     if (location == null)
                         return;
-                    lastKnownLocation = location;
+                    NavigationUtil.updateLastKnown(location);
                     String addrStr = location.getAddrStr();
                     if (TextUtils.isEmpty(addrStr)) {
                         locationHeader.setText(R.string.location_failed);

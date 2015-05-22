@@ -12,15 +12,18 @@ import android.widget.Toast;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.Place;
 import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.net.Search;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
+import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnItemClick;
 
 public class BookmarkFragment extends Fragment {
     public static final String TAG = BookmarkFragment.class.getSimpleName();
@@ -50,6 +53,17 @@ public class BookmarkFragment extends Fragment {
         if (!hidden && isAdded()) {
             refreshBookmark();
         }
+    }
+
+    @OnItemClick(R.id.result)
+    void onResultItemClick(int index) {
+        BicycleData bicycleData = dataAdapter.getItem(index);
+        if (NavigationUtil.getLastKnown() == null) {
+            Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        NavigationUtil.launchNavigator(getActivity(),
+                new Place(Double.valueOf(bicycleData.getLatitude()), Double.valueOf(bicycleData.getLongitude()), bicycleData.getSitename()));
     }
 
     private void showProgress() {
