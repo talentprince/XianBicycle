@@ -1,6 +1,7 @@
 package org.weyoung.xianbicycle.net;
 
 import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.Search;
 
 import java.util.List;
 

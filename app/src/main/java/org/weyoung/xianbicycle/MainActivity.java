@@ -1,11 +1,13 @@
 package org.weyoung.xianbicycle;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.lbsapi.auth.LBSAuthManagerListener;
 import com.baidu.navisdk.BaiduNaviManager;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
@@ -43,7 +45,7 @@ public class MainActivity extends BaseActivity {
         initBaiduNaviEngine();
 
         StatConfig.setDebugEnable(true);
-        StatService.trackCustomEvent(this, "welcome", "welcome");
+        StatService.trackCustomEvent(this, "welcome", String.format(Locale.US, "%s %s %s", Build.BRAND, Build.DEVICE, Build.VERSION.CODENAME));
     }
 
     @Override
@@ -52,10 +54,26 @@ public class MainActivity extends BaseActivity {
         if (CoachUtil.isFirstLaunch(this)) {
             Toast.makeText(this, R.string.tips, Toast.LENGTH_LONG).show();
         }
+        StatService.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        StatService.onPause(this);
     }
 
     private void initBaiduNaviEngine() {
-        BaiduNaviManager.getInstance().initEngine(this, FileUtil.getSdcardDir(), null, null);
+        BaiduNaviManager.getInstance().initEngine(this, FileUtil.getSdcardDir(), null, new LBSAuthManagerListener() {
+            @Override
+            public void onAuthResult(int i, String s) {
+//                if (i != 0) {
+//                    Toast.makeText(MainActivity.this, "Auth Failed " + s, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Auth Succeed", Toast.LENGTH_SHORT).show();
+//                }
+            }
+        });
     }
 
     @Override

@@ -20,12 +20,13 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
 import org.weyoung.xianbicycle.net.Loader;
-import org.weyoung.xianbicycle.net.Search;
+import org.weyoung.xianbicycle.data.Search;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 import org.weyoung.xianbicycle.utils.NavigationUtil;
 
@@ -98,8 +99,13 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 if (data.size() == 0) {
                     Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_SHORT).show();
                 } else {
-                    dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
-                    result.setAdapter(dataAdapter);
+                    try {
+                        dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
+                        result.setAdapter(dataAdapter);
+                    } catch (Exception e) {
+                        StatService.reportError(getActivity(), "query" + e.getMessage());
+                        Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 hideProgress();
             }
@@ -182,8 +188,12 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (dataAdapter != null) {
-            dataAdapter.setBookmarkList(BookmarkUtil.getAll(getActivity()));
-            dataAdapter.notifyDataSetChanged();
+            try {
+                dataAdapter.setBookmarkList(BookmarkUtil.getAll(sharedPreferences));
+                dataAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                StatService.reportError(getActivity(), "onSharedPreferenceChanged " + e.getMessage());
+            }
         }
     }
 }

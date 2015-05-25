@@ -19,10 +19,10 @@ public class BicycleApplication extends Application implements Thread.UncaughtEx
 
     @Override
     public void uncaughtException(Thread thread, Throwable exception) {
-        StatService.reportError(this, exception.getMessage());
         if (handler != null) {
             handler.uncaughtException(thread, exception);
         } else {
+            StatService.reportException(this, exception);
             android.os.Process.killProcess(android.os.Process.myPid());
         }
     }

@@ -1,6 +1,5 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in /Users/chenchen/Develop/sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
@@ -15,3 +14,58 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+# -dontobfuscate
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+
+-dontwarn **
+-optimizationpasses 5
+-repackageclasses 'org.weyoung'
+
+-keepattributes SourceFile,LineNumberTable
+-keepattributes Signature,*Annotation*
+-keep class sun.misc.Unsafe { *; }
+
+-keep class com.baidu.** { *; }
+-keep class com.tencent.** { *; }
+
+#Keep ButterKnife inject
+-keep class **$$ViewInjector { *; }
+-keep class butterknife.** { *; }
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+#Keep Model
+-keep class org.weyoung.xianbicycle.data.** { *; }
+
+-keep class org.weyoung.xianbicycle.NavigatorActivity { *; }
+
+#Keep Gson
+-keep class com.google.gson.** { *; }
+
+#Keep OkHttp
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+
+#-Keep the the fields annotated with @Inject of any class that is not deleted.
+-keepclassmembers class * {
+  @javax.inject.* <fields>;
+}
+
+#-Keep the names of classes that have fields annotated with @Inject and the fields themselves.
+-keepclasseswithmembernames class * {
+  @javax.inject.* <fields>;
+}
+
+-keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}

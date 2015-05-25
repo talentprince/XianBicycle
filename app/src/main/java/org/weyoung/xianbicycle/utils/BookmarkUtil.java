@@ -45,9 +45,20 @@ public class BookmarkUtil {
         }
     }
 
-    public static List<String> getAll(Context context) {
+    public static List<String> getAll(Context context) throws Exception{
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String raw = sp.getString(BOOKMARK, null);
+        Type type = new TypeToken<LinkedHashSet<String>>() {}.getType();
+        LinkedHashSet<String> ids = new Gson().fromJson(raw, type);
+        if (ids == null) {
+            return Collections.emptyList();
+        } else {
+            return new ArrayList<>(ids);
+        }
+    }
+
+    public static List<String> getAll(SharedPreferences sharedPreferences) throws Exception{
+        String raw = sharedPreferences.getString(BOOKMARK, null);
         Type type = new TypeToken<LinkedHashSet<String>>() {}.getType();
         LinkedHashSet<String> ids = new Gson().fromJson(raw, type);
         if (ids == null) {

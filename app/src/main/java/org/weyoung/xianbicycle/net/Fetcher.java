@@ -7,6 +7,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.Search;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ public class Fetcher {
                     @Override
                     public void call(Subscriber<? super List<BicycleData>> subscriber) {
                         try {
-                            Request request = new Request.Builder().get().url(URL
-                                    + URLEncoder.encode(new Gson().toJson(s), "utf-8")).build();
+                            String url = URL + URLEncoder.encode(new Gson().toJson(s), "utf-8");
+                            Request request = new Request.Builder().get().url(url).build();
                             OkHttpClient okClient = new OkHttpClient();
                             Response response = okClient.newCall(request).execute();
                             List<BicycleData> t = new ArrayList<>();
