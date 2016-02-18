@@ -1,6 +1,7 @@
 package org.weyoung.xianbicycle.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,20 +10,19 @@ import android.view.View;
 
 import org.weyoung.xianbicycle.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.Optional;
 
 public class ToolbarFragment extends Fragment {
 
-    @Optional
-    @InjectView(R.id.toolbar)
+    @Nullable
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         if (mToolbar != null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         }

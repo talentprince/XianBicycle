@@ -20,12 +20,12 @@ import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class MainActivity extends BaseActivity {
-    @InjectView(R.id.version)
+    @Bind(R.id.version)
     TextView version;
     private Fragment aboutFragment;
     private Fragment searchFragment;
@@ -35,7 +35,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         String format = String.format(Locale.US, getString(R.string.version), BuildConfig.VERSION_NAME);
         version.setText(format);

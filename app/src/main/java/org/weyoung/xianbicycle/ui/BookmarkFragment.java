@@ -23,24 +23,24 @@ import org.weyoung.xianbicycle.utils.NavigationUtil;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnItemClick;
 
 public class BookmarkFragment extends Fragment {
     public static final String TAG = BookmarkFragment.class.getSimpleName();
-    @InjectView(R.id.summary)
+    @Bind(R.id.summary)
     TextView summaryView;
-    @InjectView(R.id.result)
+    @Bind(R.id.result)
     ListView resultView;
-    @InjectView(R.id.progress)
+    @Bind(R.id.progress)
     ProgressBar progressBar;
     private DataAdapter dataAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bookmark_fragment, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         return view;
     }
 

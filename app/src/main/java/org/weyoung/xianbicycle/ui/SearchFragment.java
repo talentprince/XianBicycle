@@ -25,16 +25,16 @@ import com.tencent.stat.StatService;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
-import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.data.Search;
+import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
@@ -42,13 +42,13 @@ import butterknife.OnItemClick;
 public class SearchFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String TAG = SearchFragment.class.getSimpleName();
 
-    @InjectView(R.id.query)
+    @Bind(R.id.query)
     EditText query;
-    @InjectView(R.id.result)
+    @Bind(R.id.result)
     ListView result;
-    @InjectView(R.id.progress)
+    @Bind(R.id.progress)
     ProgressBar progressBar;
-    @InjectView(R.id.location)
+    @Bind(R.id.location)
     TextView locationHeader;
 
     private LocationClient locationClient;
@@ -59,7 +59,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
         return view;
     }

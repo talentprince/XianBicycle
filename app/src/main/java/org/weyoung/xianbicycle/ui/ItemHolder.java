@@ -11,21 +11,21 @@ import org.weyoung.xianbicycle.utils.BookmarkUtil;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class ItemHolder {
-    @InjectView(R.id.name)
+    @Bind(R.id.name)
     TextView name;
-    @InjectView(R.id.status)
+    @Bind(R.id.status)
     TextView status;
-    @InjectView(R.id.location)
+    @Bind(R.id.location)
     TextView location;
-    @InjectView(R.id.bookmark)
+    @Bind(R.id.bookmark)
     ImageView bookmark;
 
     public ItemHolder(View view) {
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
     }
 
     public void populate(final BicycleData data, List<String> bookmarkList) {

@@ -9,19 +9,19 @@ import android.webkit.WebView;
 
 import org.weyoung.xianbicycle.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class AboutFragment extends Fragment{
     public static final String TAG = AboutFragment.class.getSimpleName();
 
-    @InjectView(R.id.about)
+    @Bind(R.id.about)
     WebView about;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.about_fragment, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         return view;
     }
 
