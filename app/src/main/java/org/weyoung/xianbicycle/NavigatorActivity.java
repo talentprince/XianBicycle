@@ -1,129 +1,122 @@
 package org.weyoung.xianbicycle;
 
 import android.app.Activity;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
-import com.baidu.navisdk.BaiduNaviManager;
-import com.baidu.navisdk.comapi.mapcontrol.BNMapController;
-import com.baidu.navisdk.comapi.routeplan.BNRoutePlaner;
-import com.baidu.navisdk.model.datastruct.LocData;
-import com.baidu.navisdk.model.datastruct.SensorData;
-import com.baidu.navisdk.ui.routeguide.BNavigator;
-import com.baidu.navisdk.ui.routeguide.IBNavigatorListener;
-import com.baidu.navisdk.ui.widget.RoutePlanObserver;
-import com.baidu.navisdk.ui.widget.RoutePlanObserver.IJumpToDownloadListener;
-import com.baidu.nplatform.comapi.map.MapGLSurfaceView;
+import com.baidu.navisdk.adapter.BNRouteGuideManager;
+import com.baidu.navisdk.adapter.BNRoutePlanNode;
+
+import org.weyoung.xianbicycle.utils.NavigationUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class NavigatorActivity extends Activity{
 
-    public void onCreate(Bundle savedInstanceState){
+    private BNRoutePlanNode mBNRoutePlanNode = null;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT < 14) {
-            BaiduNaviManager.getInstance().destroyNMapView();
-        }
-        MapGLSurfaceView nMapView = BaiduNaviManager.getInstance().createNMapView(this);
-
-        View navigatorView = BNavigator.getInstance().init(this, getIntent().getExtras(), nMapView);
-
-        setContentView(navigatorView);
-        BNavigator.getInstance().setListener(mBNavigatorListener);
-        BNavigator.getInstance().startNav();
-
-
-        BNRoutePlaner.getInstance().setObserver(new RoutePlanObserver(this, new IJumpToDownloadListener() {
+        createHandler();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {}
+        View view = BNRouteGuideManager.getInstance().onCreate(this, new BNRouteGuideManager.OnNavigationListener() {
 
             @Override
-            public void onJumpToDownloadOfflineData() {
+            public void onNaviGuideEnd() {
+                finish();
+            }
+
+            @Override
+            public void notifyOtherAction(int actionType, int arg1, int arg2, Object obj) {
+            }
+
+        });
+
+        if ( view != null ) {
+            setContentView(view);
+        }
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                mBNRoutePlanNode = (BNRoutePlanNode) bundle.getSerializable(NavigationUtil.ROUTE_PLAN_NODE);
 
             }
-        }));
-
+        }
     }
 
-    private IBNavigatorListener mBNavigatorListener = new IBNavigatorListener() {
-
-        @Override
-        public void onYawingRequestSuccess() {
-
-        }
-
-        @Override
-        public void onYawingRequestStart() {
-
-        }
-
-        @Override
-        public void onPageJump(int jumpTiming, Object arg) {
-            if(IBNavigatorListener.PAGE_JUMP_WHEN_GUIDE_END == jumpTiming){
-                finish();
-            }else if(IBNavigatorListener.PAGE_JUMP_WHEN_ROUTE_PLAN_FAIL == jumpTiming){
-                finish();
-            }
-        }
-
-        @Override
-        public void notifyGPSStatusData(int arg0) {
-
-        }
-
-        @Override
-        public void notifyLoacteData(LocData arg0) {
-
-        }
-
-        @Override
-        public void notifyNmeaData(String arg0) {
-
-        }
-
-        @Override
-        public void notifySensorData(SensorData arg0) {
-
-        }
-
-        @Override
-        public void notifyStartNav() {
-            BaiduNaviManager.getInstance().dismissWaitProgressDialog();
-        }
-
-        @Override
-        public void notifyViewModeChanged(int arg0) {
-
-        }
-
-    };
-
     @Override
-    public void onResume() {
-        BNavigator.getInstance().resume();
+    protected void onResume() {
+        BNRouteGuideManager.getInstance().onResume();
         super.onResume();
-        BNMapController.getInstance().onResume();
+        if(hd != null){
+            hd.sendEmptyMessageAtTime(MSG_SHOW,2000);
+        }
+    }
+
+    protected void onPause() {
+        super.onPause();
+        BNRouteGuideManager.getInstance().onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        BNRouteGuideManager.getInstance().onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        BNRouteGuideManager.getInstance().onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+        BNRouteGuideManager.getInstance().onBackPressed(false);
+    }
+
+    public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+        BNRouteGuideManager.getInstance().onConfigurationChanged(newConfig);
+        super.onConfigurationChanged(newConfig);
     };
 
-    @Override
-    public void onPause() {
-        BNavigator.getInstance().pause();
-        super.onPause();
-        BNMapController.getInstance().onPause();
+    private void addCustomizedLayerItems() {
+        List<BNRouteGuideManager.CustomizedLayerItem> items = new ArrayList<BNRouteGuideManager.CustomizedLayerItem>();
+        BNRouteGuideManager.CustomizedLayerItem item1 = null;
+        if (mBNRoutePlanNode != null) {
+            item1 = new BNRouteGuideManager.CustomizedLayerItem(mBNRoutePlanNode.getLongitude(), mBNRoutePlanNode.getLatitude(),
+                    mBNRoutePlanNode.getCoordinateType(), getResources().getDrawable(R.mipmap.ic_launcher), BNRouteGuideManager.CustomizedLayerItem.ALIGN_CENTER);
+            items.add(item1);
+
+            BNRouteGuideManager.getInstance().setCustomizedLayerItems(items);
+        }
+        BNRouteGuideManager.getInstance().showCustomizedLayer(true);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        BNavigator.getInstance().onConfigurationChanged(newConfig);
-        super.onConfigurationChanged(newConfig);
-    }
+    private static final int MSG_SHOW = 1;
+    private static final int MSG_HIDE = 2;
+    private Handler hd = null;
 
-    public void onBackPressed(){
-        BNavigator.getInstance().onBackPressed();
-    }
-
-    @Override
-    public void onDestroy(){
-        BNavigator.destory();
-        BNRoutePlaner.getInstance().setObserver(null);
-        super.onDestroy();
+    private void createHandler() {
+        if ( hd == null ) {
+            hd = new Handler(getMainLooper()) {
+                public void handleMessage(android.os.Message msg) {
+                    if ( msg.what == MSG_SHOW ) {
+                        addCustomizedLayerItems();
+                    } else if (msg.what == MSG_HIDE) {
+                        BNRouteGuideManager.getInstance().showCustomizedLayer(false);
+                    }
+                }
+            };
+        }
     }
 }

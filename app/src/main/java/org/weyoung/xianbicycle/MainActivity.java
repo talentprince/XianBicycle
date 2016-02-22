@@ -2,26 +2,30 @@ package org.weyoung.xianbicycle;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.lbsapi.auth.LBSAuthManagerListener;
-import com.baidu.navisdk.BaiduNaviManager;
+import com.anthonycr.grant.PermissionsManager;
+import com.anthonycr.grant.PermissionsResultAction;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
 import org.weyoung.xianbicycle.ui.BookmarkFragment;
 import org.weyoung.xianbicycle.ui.SearchFragment;
-import org.weyoung.xianbicycle.utils.CoachUtil;
 import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
 public class MainActivity extends BaseActivity {
@@ -51,9 +55,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (CoachUtil.isFirstLaunch(this)) {
-            Toast.makeText(this, R.string.tips, Toast.LENGTH_LONG).show();
-        }
         StatService.onResume(this);
     }
 
@@ -64,16 +65,19 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initBaiduNaviEngine() {
-        BaiduNaviManager.getInstance().initEngine(this, FileUtil.getSdcardDir(), null, new LBSAuthManagerListener() {
-            @Override
-            public void onAuthResult(int i, String s) {
-//                if (i != 0) {
-//                    Toast.makeText(MainActivity.this, "Auth Failed " + s, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Auth Succeed", Toast.LENGTH_SHORT).show();
-//                }
-            }
-        });
+        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
+                new String[]{ACCESS_FINE_LOCATION,
+                            ACCESS_COARSE_LOCATION}, new PermissionsResultAction() {
+                    @Override
+                    public void onGranted() {
+                        BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), null, null, null);
+                    }
+                    @Override
+                    public void onDenied(String permission) {
+                        Toast.makeText(MainActivity.this,
+                                getResources().getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Override
@@ -129,5 +133,12 @@ public class MainActivity extends BaseActivity {
             }
         }
         return fragment;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
 }

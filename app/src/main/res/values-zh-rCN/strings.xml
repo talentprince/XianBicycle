@@ -15,5 +15,6 @@
     <string name="route_plan_failed">路径规划失败啦</string>
     <string name="from_place">起点</string>
     <string name="tips">点击自行车查找结果可以进入导航页哦 ^_^</string>
+    <string name="permission_request_denied">抱歉, 百度LBS服务需要一些权限才能工作</string>
 
 </resources>

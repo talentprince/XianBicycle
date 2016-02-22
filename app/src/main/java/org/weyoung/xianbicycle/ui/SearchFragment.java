@@ -28,6 +28,7 @@ import org.weyoung.xianbicycle.data.Place;
 import org.weyoung.xianbicycle.data.Search;
 import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
+import org.weyoung.xianbicycle.utils.CoachUtil;
 import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
@@ -102,6 +103,9 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                     try {
                         dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
                         result.setAdapter(dataAdapter);
+                        if (CoachUtil.isFirstLaunch(getContext())) {
+                            Toast.makeText(getContext(), R.string.tips, Toast.LENGTH_LONG).show();
+                        }
                     } catch (Exception e) {
                         StatService.reportError(getActivity(), "query" + e.getMessage());
                         Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
@@ -163,8 +167,8 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         locationClient.registerLocationListener(new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation location) {
+                locationClient.stop();
                 if (isAdded() && getActivity() != null) {
-                    locationClient.stop();
                     if (location == null)
                         return;
                     NavigationUtil.updateLastKnown(location);

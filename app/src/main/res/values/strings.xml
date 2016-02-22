@@ -17,5 +17,6 @@
     <string name="route_plan_failed">Route plan failed</string>
     <string name="from_place">From</string>
     <string name="tips">Tap bicycle result will lead to a navigation ^_^</string>
+    <string name="permission_request_denied">Sorry, Baidu LBS service need those permissions</string>
 
 </resources>

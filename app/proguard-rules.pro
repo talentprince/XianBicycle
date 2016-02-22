@@ -31,8 +31,9 @@
 -keep class com.tencent.** { *; }
 
 #Keep ButterKnife inject
--keep class **$$ViewInjector { *; }
+-keep class **$$ViewBinder { *; }
 -keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
 }
@@ -47,10 +48,24 @@
 
 #Keep Gson
 -keep class com.google.gson.** { *; }
+-keep interface com.google.gson.** { *; }
 
 #Keep OkHttp
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
+
+#Keep RxJava
+-dontwarn sun.misc.**
+
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
+
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+   long producerNode;
+   long consumerNode;
+}
 
 #-Keep the the fields annotated with @Inject of any class that is not deleted.
 -keepclassmembers class * {
