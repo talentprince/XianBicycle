@@ -11,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        tools:text="TestName"
-        />
+        tools:text="TestName"/>
 
     <TextView
         android:id="@+id/status"
@@ -21,19 +20,17 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/bookmark"
         android:layout_toRightOf="@+id/name"
-        tools:text="(99/100)"
-        />
-
+        tools:text="(99/100)"/>
 
     <TextView
         android:id="@+id/location"
+        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/bookmark"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        tools:text="Test Location"
-        />
+        android:layout_below="@+id/bookmark"
+        android:layout_toLeftOf="@+id/bookmark"
+        tools:text="Test Location"/>
 
     <ImageView
         android:id="@+id/bookmark"

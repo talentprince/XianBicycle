@@ -29,6 +29,8 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 
 public class MainActivity extends BaseActivity {
+    private static final String APP_FOLDER_NAME = "XianBicycle";
+
     @Bind(R.id.version)
     TextView version;
     private Fragment aboutFragment;
@@ -70,7 +72,7 @@ public class MainActivity extends BaseActivity {
                             ACCESS_COARSE_LOCATION}, new PermissionsResultAction() {
                     @Override
                     public void onGranted() {
-                        BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), null, null, null);
+                        BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), APP_FOLDER_NAME, null, null);
                     }
                     @Override
                     public void onDenied(String permission) {
