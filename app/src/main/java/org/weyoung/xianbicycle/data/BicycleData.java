@@ -17,6 +17,8 @@ public class BicycleData {
     private String siteid;
     @Expose
     private String sitename;
+    @Expose
+    private Double distance;
 
     /**
      *
@@ -144,4 +146,11 @@ public class BicycleData {
         this.sitename = sitename;
     }
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 }

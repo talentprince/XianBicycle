@@ -20,7 +20,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
@@ -107,7 +106,6 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                             Toast.makeText(getContext(), R.string.tips, Toast.LENGTH_LONG).show();
                         }
                     } catch (Exception e) {
-                        StatService.reportError(getActivity(), "query" + e.getMessage());
                         Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -155,7 +153,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     private void initLocation() {
         option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
+        option.setCoorType("gcj02");
         option.setScanSpan(5000);
         option.setIsNeedAddress(true);
         option.setNeedDeviceDirect(true);
@@ -181,7 +179,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                     }
 
                     if (isLocationSearch) {
-                        query(new Search(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude())));
+                        query(new Search(location.getLatitude(), location.getLongitude()));
                         isLocationSearch = false;
                     }
                 }
@@ -196,7 +194,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 dataAdapter.setBookmarkList(BookmarkUtil.getAll(sharedPreferences));
                 dataAdapter.notifyDataSetChanged();
             } catch (Exception e) {
-                StatService.reportError(getActivity(), "onSharedPreferenceChanged " + e.getMessage());
+                Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Search {
     String term;
-    String lat;
-    String lng;
+    Double lat;
+    Double lng;
     List<String> ids;
 
     public Search(String s) {
         term = s;
     }
 
-    public Search(String lat, String lng) {
+    public Search(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
     }
@@ -31,19 +31,19 @@ public class Search {
         this.term = term;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public String getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 }
