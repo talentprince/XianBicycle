@@ -3,6 +3,7 @@ package org.weyoung.xianbicycle.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -97,16 +97,16 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onLoaderFinished(List<BicycleData> data) {
                 if (data.size() == 0) {
-                    Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_SHORT).show();
+                    showMessage(R.string.no_result);
                 } else {
                     try {
                         dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
                         result.setAdapter(dataAdapter);
                         if (CoachUtil.isFirstLaunch(getContext())) {
-                            Toast.makeText(getContext(), R.string.tips, Toast.LENGTH_LONG).show();
+                            showMessage(R.string.tips);
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                        showMessage(R.string.error);
                     }
                 }
                 hideProgress();
@@ -114,7 +114,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
 
             @Override
             public void onLoaderFailed() {
-                Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                showMessage(R.string.error);
                 hideProgress();
             }
         }).load(search);
@@ -124,7 +124,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     void onResultItemClick(int index) {
         BicycleData bicycleData = dataAdapter.getItem(index);
         if (NavigationUtil.getLastKnown() == null) {
-            Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
+            showMessage(R.string.get_ur_location);
             locationClient.start();
             return;
         }
@@ -194,8 +194,20 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                 dataAdapter.setBookmarkList(BookmarkUtil.getAll(sharedPreferences));
                 dataAdapter.notifyDataSetChanged();
             } catch (Exception e) {
-                Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                showMessage(R.string.error);
             }
+        }
+    }
+
+    private void showMessage(int messageId) {
+        if (isAdded()) {
+            final Snackbar snackbar =  Snackbar.make(getView(), getString(messageId), Snackbar.LENGTH_LONG);
+            snackbar.setAction(getString(R.string.hide), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar.dismiss();
+                }
+            }).show();
         }
     }
 }
