@@ -1,10 +1,9 @@
 package org.weyoung.xianbicycle.net;
 
+import com.facebook.stetho.okhttp3.BuildConfig;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Search;
@@ -13,6 +12,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -37,6 +39,9 @@ public class Fetcher {
                             String url = URL + URLEncoder.encode(new Gson().toJson(s), "utf-8");
                             Request request = new Request.Builder().get().url(url).build();
                             OkHttpClient okClient = new OkHttpClient();
+                            if (BuildConfig.DEBUG) {
+                                okClient.interceptors().add(new StethoInterceptor());
+                            }
                             Response response = okClient.newCall(request).execute();
                             List<BicycleData> t = new ArrayList<>();
                             if (response.isSuccessful()) {

@@ -9,13 +9,13 @@ import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ItemHolder {
+    private final BookmarkUtil bookmarkUtil;
     private Context context;
 
     @Bind(R.id.name)
@@ -29,12 +29,13 @@ public class ItemHolder {
     @Bind(R.id.distance)
     TextView distance;
 
-    public ItemHolder(View view) {
+    public ItemHolder(View view, BookmarkUtil bookmarkUtil) {
+        this.bookmarkUtil = bookmarkUtil;
         context = view.getContext();
         ButterKnife.bind(this, view);
     }
 
-    public void populate(final BicycleData data, List<String> bookmarkList) {
+    public void populate(final BicycleData data) {
         name.setText(data.getSitename());
         status.setText(String.format(Locale.US, context.getString(R.string.result), getAvailableBike(data.getEmptynum(), data.getLocknum()), data.getEmptynum()));
         location.setText(data.getLocation());
@@ -44,7 +45,7 @@ public class ItemHolder {
         } else {
             distance.setVisibility(View.INVISIBLE);
         }
-        boolean selected = bookmarkList.contains(data.getSiteid());
+        boolean selected = bookmarkUtil.contains(data.getSiteid());
         setBookmark(selected);
         bookmark.setSelected(selected);
         bookmark.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +54,9 @@ public class ItemHolder {
                 v.setSelected(!v.isSelected());
                 setBookmark(v.isSelected());
                 if (v.isSelected()) {
-                    BookmarkUtil.save(v.getContext(), data.getSiteid());
+                    bookmarkUtil.addSiteId(data.getSiteid());
                 } else {
-                    BookmarkUtil.unsave(v.getContext(), data.getSiteid());
+                    bookmarkUtil.deleteSiteId(data.getSiteid());
                 }
             }
         });

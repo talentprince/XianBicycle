@@ -10,6 +10,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.weyoung.xianbicycle.BicycleApplication;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
@@ -20,6 +24,8 @@ import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,10 +41,16 @@ public class BookmarkFragment extends Fragment {
     ProgressBar progressBar;
     private DataAdapter dataAdapter;
 
+    @Inject
+    BookmarkUtil bookmarkUtil;
+
+    public static class BookmarkUpdate {}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bookmark_fragment, container, false);
         ButterKnife.bind(this, view);
+        ((BicycleApplication)(getActivity().getApplication())).component().inject(this);
         return view;
     }
 
@@ -46,6 +58,7 @@ public class BookmarkFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         refreshBookmark();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -53,6 +66,12 @@ public class BookmarkFragment extends Fragment {
         if (!hidden && isAdded()) {
             refreshBookmark();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @OnItemClick(R.id.result)
@@ -82,7 +101,7 @@ public class BookmarkFragment extends Fragment {
         }
         List<String> bookmark;
         try {
-            bookmark = BookmarkUtil.getAll(getActivity());
+            bookmark = bookmarkUtil.queryAllIds();
         } catch (Exception e) {
             showMessage(R.string.error);
             return;
@@ -102,7 +121,7 @@ public class BookmarkFragment extends Fragment {
                         showMessage(R.string.no_result);
                     } else {
                         try {
-                            dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
+                            dataAdapter = new DataAdapter(getActivity(), data, bookmarkUtil);
                             resultView.setAdapter(dataAdapter);
                         } catch (Exception e) {
                             showMessage(R.string.error);
@@ -135,4 +154,8 @@ public class BookmarkFragment extends Fragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBookmarkUpdate(BookmarkUpdate bookmarkUpdate) {
+        refreshBookmark();
+    }
 }

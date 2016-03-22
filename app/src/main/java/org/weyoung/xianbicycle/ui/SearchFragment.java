@@ -1,8 +1,6 @@
 package org.weyoung.xianbicycle.ui;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -21,6 +19,10 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.weyoung.xianbicycle.BicycleApplication;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
@@ -33,13 +35,15 @@ import org.weyoung.xianbicycle.utils.NavigationUtil;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
 
-public class SearchFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
 
     @Bind(R.id.query)
@@ -51,6 +55,9 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     @Bind(R.id.location)
     TextView locationHeader;
 
+    @Inject
+    BookmarkUtil bookmarkUtil;
+
     private LocationClient locationClient;
     private LocationClientOption option;
     private boolean isLocationSearch;
@@ -60,7 +67,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_fragment, container, false);
         ButterKnife.bind(this, view);
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+        ((BicycleApplication)(getActivity().getApplication())).component().inject(this);
         return view;
     }
 
@@ -78,6 +85,14 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         });
 
         initLocation();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -100,7 +115,7 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                     showMessage(R.string.no_result);
                 } else {
                     try {
-                        dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
+                        dataAdapter = new DataAdapter(getActivity(), data, bookmarkUtil);
                         result.setAdapter(dataAdapter);
                         if (CoachUtil.isFirstLaunch(getContext())) {
                             showMessage(R.string.tips);
@@ -187,18 +202,6 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
         });
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (dataAdapter != null) {
-            try {
-                dataAdapter.setBookmarkList(BookmarkUtil.getAll(sharedPreferences));
-                dataAdapter.notifyDataSetChanged();
-            } catch (Exception e) {
-                showMessage(R.string.error);
-            }
-        }
-    }
-
     private void showMessage(int messageId) {
         if (isAdded()) {
             final Snackbar snackbar =  Snackbar.make(getView(), getString(messageId), Snackbar.LENGTH_LONG);
@@ -208,6 +211,13 @@ public class SearchFragment extends Fragment implements SharedPreferences.OnShar
                     snackbar.dismiss();
                 }
             }).show();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBookmarkUpdate(BookmarkFragment.BookmarkUpdate bookmarkUpdate) {
+        if (dataAdapter != null) {
+            dataAdapter.notifyDataSetChanged();
         }
     }
 }

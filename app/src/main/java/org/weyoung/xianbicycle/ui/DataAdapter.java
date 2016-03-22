@@ -8,22 +8,19 @@ import android.widget.ArrayAdapter;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import java.util.List;
 
 public class DataAdapter extends ArrayAdapter<BicycleData> {
 
     private final Context context;
-    private List<String> bookmarkList;
+    private final BookmarkUtil bookmarkUtil;
 
-    public DataAdapter(Context context, List<BicycleData> list, List<String> bookmarkList) {
+    public DataAdapter(Context context, List<BicycleData> list, BookmarkUtil bookmarkUtil) {
         super(context, 0, list);
         this.context = context;
-        this.bookmarkList = bookmarkList;
-    }
-
-    public void setBookmarkList(List<String> bookmarkList) {
-        this.bookmarkList = bookmarkList;
+        this.bookmarkUtil = bookmarkUtil;
     }
 
     @Override
@@ -31,10 +28,10 @@ public class DataAdapter extends ArrayAdapter<BicycleData> {
         BicycleData data = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
-            convertView.setTag(new ItemHolder(convertView));
+            convertView.setTag(new ItemHolder(convertView, bookmarkUtil));
         }
         ItemHolder itemHolder = (ItemHolder) convertView.getTag();
-        itemHolder.populate(data, bookmarkList);
+        itemHolder.populate(data);
         return convertView;
     }
 }
