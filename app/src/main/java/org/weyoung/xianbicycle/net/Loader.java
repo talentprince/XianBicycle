@@ -1,11 +1,14 @@
 package org.weyoung.xianbicycle.net;
 
-import org.weyoung.xianbicycle.data.BicycleData;
-import org.weyoung.xianbicycle.data.Search;
+import org.weyoung.xianbicycle.data.BicycleResult;
+import org.weyoung.xianbicycle.data.SearchQuery;
 
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
+import static rx.Single.just;
 
 public class Loader {
     private Callback callback;
@@ -17,24 +20,25 @@ public class Loader {
     public interface Callback {
         void onLoaderStarted();
 
-        void onLoaderFinished(List<BicycleData> data);
+        void onLoaderFinished(List<BicycleResult> data);
 
         void onLoaderFailed();
     }
 
-    public void load(Search search) {
+    public void load(SearchQuery searchQuery) {
         callback.onLoaderStarted();
-        Fetcher fetcher = new Fetcher();
-        fetcher.getData(search).subscribe(new Action1<List<BicycleData>>() {
-            @Override
-            public void call(List<BicycleData> data) {
-                callback.onLoaderFinished(data);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                callback.onLoaderFailed();
-            }
-        });
+        just(searchQuery).compose(new Fetcher().fetchData())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<BicycleResult>>() {
+                    @Override
+                    public void call(List<BicycleResult> data) {
+                        callback.onLoaderFinished(data);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        callback.onLoaderFailed();
+                    }
+                });
     }
 }

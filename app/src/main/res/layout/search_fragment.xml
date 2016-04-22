@@ -30,14 +30,21 @@
         android:imeOptions="actionSearch"
         android:singleLine="true"/>
 
-    <ListView
-        android:id="@+id/result"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/content_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/query"/>
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/errorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

@@ -1,7 +1,7 @@
 package org.weyoung.xianbicycle;
 
-import org.weyoung.xianbicycle.ui.BookmarkFragment;
-import org.weyoung.xianbicycle.ui.SearchFragment;
+import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
+import org.weyoung.xianbicycle.ui.search.SearchFragment;
 
 import javax.inject.Singleton;
 

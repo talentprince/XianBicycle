@@ -17,7 +17,7 @@ import com.couchbase.lite.android.AndroidContext;
 import com.google.common.collect.ImmutableMap;
 
 import org.greenrobot.eventbus.EventBus;
-import org.weyoung.xianbicycle.ui.BookmarkFragment;
+import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
 
 import java.util.Iterator;
 import java.util.List;

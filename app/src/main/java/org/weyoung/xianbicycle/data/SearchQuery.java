@@ -3,22 +3,22 @@ package org.weyoung.xianbicycle.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Search {
+public class SearchQuery {
     String term;
     Double lat;
     Double lng;
     List<String> ids;
 
-    public Search(String s) {
+    public SearchQuery(String s) {
         term = s;
     }
 
-    public Search(Double lat, Double lng) {
+    public SearchQuery(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
-    public Search(List<String> ids) {
+    public SearchQuery(List<String> ids) {
         this.ids = new ArrayList<>();
         this.ids.addAll(ids);
     }

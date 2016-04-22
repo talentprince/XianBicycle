@@ -10,24 +10,24 @@ import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 
 import org.weyoung.xianbicycle.NavigatorActivity;
-import org.weyoung.xianbicycle.data.Place;
+import org.weyoung.xianbicycle.data.BicycleLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NavigationUtil {
     public static final String ROUTE_PLAN_NODE = "routePlanNode";
-    public static Place lastKnown;
+    public static BicycleLocation lastKnown;
 
     public static void updateLastKnown(BDLocation lastKnown) {
-        NavigationUtil.lastKnown = new Place(lastKnown.getLatitude(), lastKnown.getLongitude(), lastKnown.getAddrStr());
+        NavigationUtil.lastKnown = new BicycleLocation(lastKnown.getLatitude(), lastKnown.getLongitude(), lastKnown.getAddrStr());
     }
 
-    public static Place getLastKnown() {
+    public static BicycleLocation getLastKnown() {
         return lastKnown;
     }
 
-    public static void launchNavigator(final Activity activity, Place end) {
+    public static void launchNavigator(final Activity activity, BicycleLocation end) {
         if (lastKnown == null) {
             return;
         }

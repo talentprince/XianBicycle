@@ -5,8 +5,8 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.weyoung.xianbicycle.data.BicycleData;
-import org.weyoung.xianbicycle.data.Search;
+import org.weyoung.xianbicycle.data.BicycleResult;
+import org.weyoung.xianbicycle.data.SearchQuery;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,46 +16,43 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.Single;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static rx.Observable.just;
 
 public class Fetcher {
 
     public static final String URL = "http://xian-pub-bicycle.herokuapp.com/api?query=";
 
-    public Observable<List<BicycleData>> getData(final Search search) {
-        return just(search).flatMap(new Func1<Search, Observable<List<BicycleData>>>() {
+    public Single.Transformer<SearchQuery, List<BicycleResult>> fetchData() {
+        return new Single.Transformer<SearchQuery, List<BicycleResult>>() {
             @Override
-            public Observable<List<BicycleData>> call(final Search s) {
-
-                return Observable.create(new Observable.OnSubscribe<List<BicycleData>>() {
+            public Single<List<BicycleResult>> call(Single<SearchQuery> searchQuerySingle) {
+                return searchQuerySingle.observeOn(Schedulers.io()).map(new Func1<SearchQuery, List<BicycleResult>>() {
                     @Override
-                    public void call(Subscriber<? super List<BicycleData>> subscriber) {
+                    public List<BicycleResult> call(SearchQuery searchQuery) {
                         try {
-                            String url = URL + URLEncoder.encode(new Gson().toJson(s), "utf-8");
+                            String url = URL + URLEncoder.encode(new Gson().toJson(searchQuery), "utf-8");
                             Request request = new Request.Builder().get().url(url).build();
                             OkHttpClient okClient = new OkHttpClient();
                             if (BuildConfig.DEBUG) {
                                 okClient.interceptors().add(new StethoInterceptor());
                             }
                             Response response = okClient.newCall(request).execute();
-                            List<BicycleData> t = new ArrayList<>();
+                            List<BicycleResult> t = new ArrayList<>();
                             if (response.isSuccessful()) {
                                 t = new Gson().fromJson(response.body().string(),
-                                        new TypeToken<List<BicycleData>>() {
+                                        new TypeToken<List<BicycleResult>>() {
                                         }.getType());
                             }
-                            subscriber.onNext(t);
+                            return t;
                         } catch (Exception e) {
-                            subscriber.onError(e);
+                            throw new RuntimeException(e);
                         }
                     }
-                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                });
             }
-        });
+
+        };
     }
 }

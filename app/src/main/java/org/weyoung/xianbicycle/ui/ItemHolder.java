@@ -1,12 +1,13 @@
 package org.weyoung.xianbicycle.ui;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.weyoung.xianbicycle.R;
-import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.BicycleResult;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import java.util.Locale;
@@ -14,7 +15,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ItemHolder {
+public class ItemHolder extends RecyclerView.ViewHolder{
     private final BookmarkUtil bookmarkUtil;
     private Context context;
 
@@ -30,12 +31,13 @@ public class ItemHolder {
     TextView distance;
 
     public ItemHolder(View view, BookmarkUtil bookmarkUtil) {
+        super(view);
         this.bookmarkUtil = bookmarkUtil;
         context = view.getContext();
         ButterKnife.bind(this, view);
     }
 
-    public void populate(final BicycleData data) {
+    public void populate(final BicycleResult data) {
         name.setText(data.getSitename());
         status.setText(String.format(Locale.US, context.getString(R.string.result), getAvailableBike(data.getEmptynum(), data.getLocknum()), data.getEmptynum()));
         location.setText(data.getLocation());

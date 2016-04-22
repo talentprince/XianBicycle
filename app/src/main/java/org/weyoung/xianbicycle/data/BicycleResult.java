@@ -2,7 +2,7 @@ package org.weyoung.xianbicycle.data;
 
 import com.google.gson.annotations.Expose;
 
-public class BicycleData {
+public class BicycleResult {
     @Expose
     private String emptynum;
     @Expose

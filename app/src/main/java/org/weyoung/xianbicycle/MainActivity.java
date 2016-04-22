@@ -15,8 +15,8 @@ import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
-import org.weyoung.xianbicycle.ui.BookmarkFragment;
-import org.weyoung.xianbicycle.ui.SearchFragment;
+import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
+import org.weyoung.xianbicycle.ui.search.SearchFragment;
 import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;

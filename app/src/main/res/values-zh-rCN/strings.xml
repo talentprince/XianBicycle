@@ -5,7 +5,7 @@
     <string name="error">出错啦, 重新试试</string>
     <string name="no_result">查无结果</string>
     <string name="ur_location">您的位置:%1$s</string>
-    <string name="get_ur_location">定位中...</string>
+    <string name="get_ur_location">定位中…</string>
     <string name="action_about">关于</string>
     <string name="bookmark_number">您已收藏了%1$s个公共自行车站点</string>
     <string name="navdrawer_item_about">关于</string>
