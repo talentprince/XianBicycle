@@ -67,7 +67,7 @@ public class BookmarkFragment extends MvpFragment<BookmarkView, BookmarkPresente
 
     @Override
     public void onHiddenChanged(boolean hidden) {
-        if (!hidden && isAdded()) {
+        if (!hidden && isAdded() && presenter != null) {
             presenter.refreshBookmark();
         }
     }

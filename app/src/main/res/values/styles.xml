@@ -17,4 +17,15 @@
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
+    <!-- Card View -->
+    <style name="AppTheme.Base.Card" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
 </resources>
