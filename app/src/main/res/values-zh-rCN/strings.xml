@@ -18,5 +18,7 @@
     <string name="permission_request_denied">抱歉, 百度LBS服务需要一些权限才能工作</string>
     <string name="result">(可租 %1$s,可还 %2$s)</string>
     <string name="hide">隐藏</string>
+    <style name="showcase_title">从这里把控您的绿色出行!</style>
+    <style name="showcase_button">开始吧~</style>
 
 </resources>

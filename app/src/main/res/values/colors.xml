@@ -3,6 +3,7 @@
     <color name="theme_primary">#019858</color>
     <color name="theme_primary_dark">#01814A</color>
     <color name="theme_accent">#007979</color>
+    <color name="coach_background">#88FFFFFF</color>
 
     <color name="real_white">#FFFFFFFF</color>
     <color name="real_dark">#FF697684</color>

@@ -20,5 +20,7 @@
     <string name="permission_request_denied">Sorry, Baidu LBS service need those permissions</string>
     <string name="result">(%1$s Available,%2$s Empty)</string>
     <string name="hide">Hide</string>
+    <string name="showcase_title">Control you green travel from here!</string>
+    <string name="showcase_button">Let\'s begin~</string>
 
 </resources>
