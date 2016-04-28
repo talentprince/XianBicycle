@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_PHONE_STATE;
 
 
 public class MainActivity extends BaseActivity {
@@ -69,7 +70,8 @@ public class MainActivity extends BaseActivity {
     private void initBaiduNaviEngine() {
         PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
                 new String[]{ACCESS_FINE_LOCATION,
-                            ACCESS_COARSE_LOCATION}, new PermissionsResultAction() {
+                            ACCESS_COARSE_LOCATION,
+                            READ_PHONE_STATE}, new PermissionsResultAction() {
                     @Override
                     public void onGranted() {
                         BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), APP_FOLDER_NAME, null, null);
