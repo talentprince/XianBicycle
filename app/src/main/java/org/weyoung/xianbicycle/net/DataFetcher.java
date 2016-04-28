@@ -20,7 +20,7 @@ import rx.Single;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class Fetcher {
+class DataFetcher {
 
     public static final String URL = "http://xian-pub-bicycle.herokuapp.com/api?query=";
 

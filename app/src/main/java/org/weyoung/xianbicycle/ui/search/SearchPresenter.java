@@ -9,7 +9,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleResult;
 import org.weyoung.xianbicycle.data.SearchQuery;
-import org.weyoung.xianbicycle.net.Loader;
+import org.weyoung.xianbicycle.net.BicycleLoader;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
     }
 
     public void query(SearchQuery searchQuery) {
-        new Loader(new Loader.Callback() {
+        new BicycleLoader(new BicycleLoader.Callback() {
             @Override
             public void onLoaderStarted() {
                 if (isViewAttached()) {

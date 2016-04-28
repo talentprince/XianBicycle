@@ -10,10 +10,10 @@ import rx.functions.Action1;
 
 import static rx.Single.just;
 
-public class Loader {
+public class BicycleLoader {
     private Callback callback;
 
-    public Loader(Callback callback) {
+    public BicycleLoader(Callback callback) {
         this.callback = callback;
     }
 
@@ -27,7 +27,7 @@ public class Loader {
 
     public void load(SearchQuery searchQuery) {
         callback.onLoaderStarted();
-        just(searchQuery).compose(new Fetcher().fetchData())
+        just(searchQuery).compose(new DataFetcher().fetchData())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<BicycleResult>>() {
                     @Override

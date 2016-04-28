@@ -5,7 +5,7 @@ import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleResult;
 import org.weyoung.xianbicycle.data.SearchQuery;
-import org.weyoung.xianbicycle.net.Loader;
+import org.weyoung.xianbicycle.net.BicycleLoader;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class BookmarkPresenter extends MvpBasePresenter<BookmarkView> {
             return;
         }
         List<String> bookmark = bookmarkUtil.queryAllIds();
-        new Loader(new Loader.Callback() {
+        new BicycleLoader(new BicycleLoader.Callback() {
             @Override
             public void onLoaderStarted() {
                 if (isViewAttached()) {
