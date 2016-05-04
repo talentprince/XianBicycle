@@ -15,13 +15,13 @@
  */
 package org.weyoung.xianbicycle;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 import com.tencent.stat.StatService;
 
 
-public class BicycleApplication extends Application implements Thread.UncaughtExceptionHandler {
+public class BicycleApplication extends MultiDexApplication implements Thread.UncaughtExceptionHandler {
 
     Thread.UncaughtExceptionHandler handler;
     AppComponent appComponent;
