@@ -47,7 +47,6 @@ import org.weyoung.xianbicycle.ui.RecyclerAdapter;
 import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 import org.weyoung.xianbicycle.utils.CoachUtil;
-import org.weyoung.xianbicycle.utils.FileUtil;
 import org.weyoung.xianbicycle.utils.NavigationUtil;
 
 import java.util.List;
@@ -82,7 +81,6 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     @Inject
     SearchPresenter searchPresenter;
 
-    private boolean isLocationSearch;
     private RecyclerAdapter recyclerAdapter;
 
     @Override
@@ -107,24 +105,16 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        presenter.startLocationClient();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.stopLocationClient();
         EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.location_search)
     void onLocationSearchClick() {
-        isLocationSearch = true;
         if (recyclerAdapter != null)
             recyclerAdapter.clear();
-        presenter.startLocationClient();
+        presenter.performLocationSearch();
     }
 
     private void initView() {
@@ -211,7 +201,7 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     }
 
     @Override
-    public void setLocation(AMapLocation location) {
+    public void setLocation(boolean isLocationSearch, AMapLocation location) {
         if (isAdded() && getActivity() != null) {
             if (location == null)
                 return;
@@ -226,7 +216,6 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
 
             if (isLocationSearch) {
                 presenter.query(new SearchQuery(location.getLatitude(), location.getLongitude()));
-                isLocationSearch = false;
             }
         }
     }
@@ -238,7 +227,7 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     public void onBicycleClick(BicycleResult bicycleResult) {
         if (NavigationUtil.getLastKnown() == null) {
             showMessage(R.string.get_ur_location);
-            presenter.startLocationClient();
+            presenter.performLocationSearch();
             return;
         }
         NavigationUtil.launchNavigator(getActivity(),

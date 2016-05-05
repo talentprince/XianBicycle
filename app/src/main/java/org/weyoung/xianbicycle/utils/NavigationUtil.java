@@ -42,7 +42,6 @@ public class NavigationUtil {
         if (lastKnown == null) {
             return;
         }
-
         LatLng start = new LatLng(lastKnown.getLat(), lastKnown.getLon());
         LatLng end = locationTransform(activity, endLocation.getLat(), endLocation.getLon());
         Intent intent = new Intent(activity, RouteActivity.class);

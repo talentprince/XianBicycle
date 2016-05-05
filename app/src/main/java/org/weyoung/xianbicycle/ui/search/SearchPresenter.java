@@ -34,6 +34,8 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
     @Inject
     AMapLocationClient locationClient;
 
+    private boolean isLocationSearch;
+
     @Inject
     public SearchPresenter() {
     }
@@ -50,9 +52,9 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
         locationClient.setLocationListener(new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
-                locationClient.stopLocation();
                 if (isViewAttached()) {
-                    getView().setLocation(aMapLocation);
+                    getView().setLocation(isLocationSearch, aMapLocation);
+                    isLocationSearch = !isLocationSearch;
                 }
             }
         });
@@ -91,15 +93,15 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
         }).load(searchQuery);
     }
 
-    public void startLocationClient() {
+    public void performLocationSearch() {
         if (locationClient != null) {
-            locationClient.startLocation();
-        }
-    }
-
-    public void stopLocationClient() {
-        if (locationClient != null) {
-            locationClient.stopLocation();
+            isLocationSearch = true;
+            AMapLocation lastKnownLocation = locationClient.getLastKnownLocation();
+            if (lastKnownLocation != null && isViewAttached()) {
+                getView().setLocation(isLocationSearch, lastKnownLocation);
+            } else {
+                locationClient.startLocation();
+            }
         }
     }
 }

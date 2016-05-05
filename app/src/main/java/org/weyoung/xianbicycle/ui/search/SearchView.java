@@ -26,7 +26,7 @@ import java.util.List;
 interface SearchView extends MvpView {
     void showMessage(int resId);
     void showTip(int resId);
-    void setLocation(AMapLocation location);
+    void setLocation(boolean isLocationSearch, AMapLocation location);
     void showLoading();
     void showContent();
     void setData(List<BicycleResult> data);

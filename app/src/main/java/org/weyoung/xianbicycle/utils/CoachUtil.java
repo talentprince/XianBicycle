@@ -35,7 +35,7 @@ import org.weyoung.xianbicycle.ui.CoachTarget;
 public class CoachUtil {
 
     private static final String VERSION = "version";
-    private static final String COACH = "coach";
+    private static final String COACH = "coach" + BuildConfig.VERSION_CODE;
 
     public static boolean isFirstLaunch(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
