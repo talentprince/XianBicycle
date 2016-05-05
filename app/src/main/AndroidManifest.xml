@@ -30,7 +30,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <activity android:name=".RouteActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/navi_name"/>
+
+        <service android:name="com.amap.api.location.APSService"/>
 
         <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/gaode_api_key" />
 

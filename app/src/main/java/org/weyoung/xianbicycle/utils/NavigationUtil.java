@@ -16,13 +16,18 @@
 package org.weyoung.xianbicycle.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 
 import com.amap.api.location.AMapLocation;
+import com.amap.api.location.CoordinateConverter;
+import com.amap.api.location.DPoint;
+import com.amap.api.maps.model.LatLng;
 
+import org.weyoung.xianbicycle.RouteActivity;
 import org.weyoung.xianbicycle.data.BicycleLocation;
 
 public class NavigationUtil {
-    public static final String ROUTE_PLAN_NODE = "routePlanNode";
     public static BicycleLocation lastKnown;
 
     public static void updateLastKnown(AMapLocation lastKnown) {
@@ -33,37 +38,29 @@ public class NavigationUtil {
         return lastKnown;
     }
 
-    public static void launchNavigator(final Activity activity, BicycleLocation end) {
+    public static void launchNavigator(final Activity activity, BicycleLocation endLocation) {
         if (lastKnown == null) {
             return;
         }
-//        final BNRoutePlanNode startPoint = new BNRoutePlanNode(lastKnown.getLon(), lastKnown.getLat(),
-//                lastKnown.getName(), null, BNRoutePlanNode.CoordinateType.GCJ02);
-//        BNRoutePlanNode endPoint = new BNRoutePlanNode(end.getLon(), end.getLat(),
-//                end.getName(), null, BNRoutePlanNode.CoordinateType.BD09LL);
-//        List<BNRoutePlanNode> list = new ArrayList<>();
-//        list.add(startPoint);
-//        list.add(endPoint);
-//        BaiduNaviManager.getInstance().launchNavigator(activity,
-//                list,
-//                1,
-//                true,
-//                new BaiduNaviManager.RoutePlanListener() {
-//                    @Override
-//                    public void onJumpToNavigator() {
-//                        Intent intent = new Intent(activity, NavigatorActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable(ROUTE_PLAN_NODE, startPoint);
-//                        intent.putExtras(bundle);
-//                        activity.startActivity(intent);
-//                    }
-//
-//                    @Override
-//                    public void onRoutePlanFailed() {
-//                        Toast.makeText(activity, "算路失败", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//        );
+
+        LatLng start = new LatLng(lastKnown.getLat(), lastKnown.getLon());
+        LatLng end = locationTransform(activity, endLocation.getLat(), endLocation.getLon());
+        Intent intent = new Intent(activity, RouteActivity.class);
+        intent.putExtra("start", start);
+        intent.putExtra("end", end);
+        activity.startActivity(intent);
+    }
+
+    private static LatLng locationTransform(Context context, double lan, double lon) {
+        CoordinateConverter coordinateConverter = new CoordinateConverter(context);
+        try {
+            DPoint point = coordinateConverter.from(CoordinateConverter.CoordType.BAIDU).coord(new DPoint(lan, lon)).convert();
+            return new LatLng(point.getLatitude(), point.getLongitude());
+        } catch (Exception e) {}
+        double x = lon - 0.0065, y = lan - 0.006;
+        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * Math.PI);
+        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * Math.PI);
+        return new LatLng(z * Math.sin(theta), z * Math.cos(theta));
     }
 
 }
