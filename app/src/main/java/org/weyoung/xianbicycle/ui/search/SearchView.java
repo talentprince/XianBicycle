@@ -30,4 +30,6 @@ interface SearchView extends MvpView {
     void showLoading();
     void showContent();
     void setData(List<BicycleResult> data);
+    void onPermissionGranted();
+    void onPermissionDenied();
 }

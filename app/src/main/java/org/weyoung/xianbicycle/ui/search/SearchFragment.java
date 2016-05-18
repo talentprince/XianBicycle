@@ -28,11 +28,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
-import com.anthonycr.grant.PermissionsManager;
-import com.anthonycr.grant.PermissionsResultAction;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,10 +54,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.READ_PHONE_STATE;
 
 
 public class SearchFragment extends MvpFragment<SearchView, SearchPresenter>
@@ -133,20 +126,7 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     }
 
     private void initLocation() {
-        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
-                new String[]{ACCESS_FINE_LOCATION,
-                        ACCESS_COARSE_LOCATION,
-                        READ_PHONE_STATE}, new PermissionsResultAction() {
-                    @Override
-                    public void onGranted() {
-                        presenter.initLocationClient();
-                    }
-                    @Override
-                    public void onDenied(String permission) {
-                        Toast.makeText(getActivity(),
-                                getResources().getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show();
-                    }
-                });
+        presenter.requestPermissionsIfNeeded(getContext());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -218,6 +198,16 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
                 presenter.query(new SearchQuery(location.getLatitude(), location.getLongitude()));
             }
         }
+    }
+
+    @Override
+    public void onPermissionGranted() {
+        presenter.initLocationClient();
+    }
+
+    @Override
+    public void onPermissionDenied() {
+        showMessage(R.string.permission_request_denied);
     }
 
     //================================================================================
