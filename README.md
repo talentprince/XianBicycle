@@ -1,6 +1,8 @@
 # XianBicycle
 XianBicycle Check and Search 西安公共自行车查询
 
+[![Build status](https://badge.buildkite.com/84c7e0189465fba23b5274d672b13a84d13e117ce6b7999b67.svg)](https://buildkite.com/weyoung/xianbicycle)
+
 ###Based On
 
 [西安公共自行车查询](http://xian-pub-bicycle.herokuapp.com/)
