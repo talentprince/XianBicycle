@@ -21,27 +21,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anthonycr.grant.PermissionsManager;
-import com.anthonycr.grant.PermissionsResultAction;
-import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
 import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
 import org.weyoung.xianbicycle.ui.search.SearchFragment;
-import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.READ_PHONE_STATE;
 
 
 public class MainActivity extends BaseActivity {
@@ -64,8 +56,6 @@ public class MainActivity extends BaseActivity {
 
         initAllFragment();
 
-        initBaiduNaviEngine();
-
         StatConfig.setDebugEnable(true);
         StatService.trackCustomEvent(this, "welcome", String.format(Locale.US, "%s %s %s", Build.BRAND, Build.DEVICE, Build.VERSION.CODENAME));
     }
@@ -80,23 +70,6 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         StatService.onPause(this);
-    }
-
-    private void initBaiduNaviEngine() {
-        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
-                new String[]{ACCESS_FINE_LOCATION,
-                            ACCESS_COARSE_LOCATION,
-                            READ_PHONE_STATE}, new PermissionsResultAction() {
-                    @Override
-                    public void onGranted() {
-                        BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), APP_FOLDER_NAME, null, null);
-                    }
-                    @Override
-                    public void onDenied(String permission) {
-                        Toast.makeText(MainActivity.this,
-                                getResources().getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show();
-                    }
-                });
     }
 
     @Override

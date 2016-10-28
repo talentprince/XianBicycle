@@ -15,10 +15,10 @@
  */
 package org.weyoung.xianbicycle.ui.search;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import org.weyoung.xianbicycle.R;
@@ -32,28 +32,30 @@ import javax.inject.Inject;
 
 public class SearchPresenter extends MvpBasePresenter<SearchView>{
     @Inject
-    LocationClient locationClient;
+    AMapLocationClient locationClient;
+
+    private boolean isLocationSearch;
 
     @Inject
     public SearchPresenter() {
     }
 
     public void initLocationClient() {
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("gcj02");
-        option.setScanSpan(5000);
-        option.setIsNeedAddress(true);
-        option.setNeedDeviceDirect(true);
+        AMapLocationClientOption option = new AMapLocationClientOption();
+        option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        option.setNeedAddress(true);
+        option.setOnceLocation(true);
 
-        locationClient.setLocOption(option);
-        locationClient.start();
+        locationClient.setLocationOption(option);
+        locationClient.startLocation();
 
-        locationClient.registerLocationListener(new BDLocationListener() {
+        locationClient.setLocationListener(new AMapLocationListener() {
             @Override
-            public void onReceiveLocation(BDLocation location) {
-                locationClient.stop();
-                getView().setLocation(location);
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if (isViewAttached()) {
+                    getView().setLocation(isLocationSearch, aMapLocation);
+                    isLocationSearch = !isLocationSearch;
+                }
             }
         });
     }
@@ -91,15 +93,15 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
         }).load(searchQuery);
     }
 
-    public void startLocationClient() {
+    public void performLocationSearch() {
         if (locationClient != null) {
-            locationClient.start();
-        }
-    }
-
-    public void stopLocationClient() {
-        if (locationClient != null) {
-            locationClient.stop();
+            isLocationSearch = true;
+            AMapLocation lastKnownLocation = locationClient.getLastKnownLocation();
+            if (lastKnownLocation != null && isViewAttached()) {
+                getView().setLocation(isLocationSearch, lastKnownLocation);
+            } else {
+                locationClient.startLocation();
+            }
         }
     }
 }

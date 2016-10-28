@@ -28,8 +28,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.baidu.location.BDLocation;
+import com.amap.api.location.AMapLocation;
+import com.anthonycr.grant.PermissionsManager;
+import com.anthonycr.grant.PermissionsResultAction;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +58,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_PHONE_STATE;
+
 
 public class SearchFragment extends MvpFragment<SearchView, SearchPresenter>
 implements SearchView, RecyclerAdapter.ItemClickListener{
@@ -74,7 +81,6 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     @Inject
     SearchPresenter searchPresenter;
 
-    private boolean isLocationSearch;
     private RecyclerAdapter recyclerAdapter;
 
     @Override
@@ -94,29 +100,21 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        presenter.initLocationClient();
+        initLocation();
         EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.startLocationClient();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.stopLocationClient();
         EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.location_search)
     void onLocationSearchClick() {
-        isLocationSearch = true;
         if (recyclerAdapter != null)
             recyclerAdapter.clear();
-        presenter.startLocationClient();
+        presenter.performLocationSearch();
     }
 
     private void initView() {
@@ -132,6 +130,23 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
         recyclerAdapter = new RecyclerAdapter(bookmarkUtil, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
+    }
+
+    private void initLocation() {
+        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
+                new String[]{ACCESS_FINE_LOCATION,
+                        ACCESS_COARSE_LOCATION,
+                        READ_PHONE_STATE}, new PermissionsResultAction() {
+                    @Override
+                    public void onGranted() {
+                        presenter.initLocationClient();
+                    }
+                    @Override
+                    public void onDenied(String permission) {
+                        Toast.makeText(getActivity(),
+                                getResources().getString(R.string.permission_request_denied), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -186,12 +201,12 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     }
 
     @Override
-    public void setLocation(BDLocation location) {
+    public void setLocation(boolean isLocationSearch, AMapLocation location) {
         if (isAdded() && getActivity() != null) {
             if (location == null)
                 return;
             NavigationUtil.updateLastKnown(location);
-            String addrStr = location.getAddrStr();
+            String addrStr = location.getAddress();
             if (TextUtils.isEmpty(addrStr)) {
                 locationHeader.setText(R.string.location_failed);
             } else {
@@ -201,7 +216,6 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
 
             if (isLocationSearch) {
                 presenter.query(new SearchQuery(location.getLatitude(), location.getLongitude()));
-                isLocationSearch = false;
             }
         }
     }
@@ -213,7 +227,7 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     public void onBicycleClick(BicycleResult bicycleResult) {
         if (NavigationUtil.getLastKnown() == null) {
             showMessage(R.string.get_ur_location);
-            presenter.startLocationClient();
+            presenter.performLocationSearch();
             return;
         }
         NavigationUtil.launchNavigator(getActivity(),

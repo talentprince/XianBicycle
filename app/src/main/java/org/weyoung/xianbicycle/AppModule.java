@@ -18,14 +18,12 @@ package org.weyoung.xianbicycle;
 
 import android.content.Context;
 
-import com.baidu.location.LocationClient;
+import com.amap.api.location.AMapLocationClient;
 
-import org.weyoung.xianbicycle.ui.search.SearchPresenter;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import javax.inject.Singleton;
 
-import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 
@@ -51,8 +49,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public LocationClient providesLocationClient(Context context) {
-        return new LocationClient(context);
+    public AMapLocationClient providesLocationClient(Context context) {
+        return new AMapLocationClient(context);
     }
 
 }
