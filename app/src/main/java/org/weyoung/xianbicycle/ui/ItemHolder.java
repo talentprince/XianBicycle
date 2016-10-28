@@ -1,21 +1,37 @@
+/*
+ * Copyright (C) 2015 A Weyoung App
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.weyoung.xianbicycle.ui;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.weyoung.xianbicycle.R;
-import org.weyoung.xianbicycle.data.BicycleData;
+import org.weyoung.xianbicycle.data.BicycleResult;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ItemHolder {
+public class ItemHolder extends RecyclerView.ViewHolder{
+    private final BookmarkUtil bookmarkUtil;
     private Context context;
 
     @Bind(R.id.name)
@@ -29,12 +45,14 @@ public class ItemHolder {
     @Bind(R.id.distance)
     TextView distance;
 
-    public ItemHolder(View view) {
+    public ItemHolder(View view, BookmarkUtil bookmarkUtil) {
+        super(view);
+        this.bookmarkUtil = bookmarkUtil;
         context = view.getContext();
         ButterKnife.bind(this, view);
     }
 
-    public void populate(final BicycleData data, List<String> bookmarkList) {
+    public void populate(final BicycleResult data) {
         name.setText(data.getSitename());
         status.setText(String.format(Locale.US, context.getString(R.string.result), getAvailableBike(data.getEmptynum(), data.getLocknum()), data.getEmptynum()));
         location.setText(data.getLocation());
@@ -44,7 +62,7 @@ public class ItemHolder {
         } else {
             distance.setVisibility(View.INVISIBLE);
         }
-        boolean selected = bookmarkList.contains(data.getSiteid());
+        boolean selected = bookmarkUtil.contains(data.getSiteid());
         setBookmark(selected);
         bookmark.setSelected(selected);
         bookmark.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +71,9 @@ public class ItemHolder {
                 v.setSelected(!v.isSelected());
                 setBookmark(v.isSelected());
                 if (v.isSelected()) {
-                    BookmarkUtil.save(v.getContext(), data.getSiteid());
+                    bookmarkUtil.addSiteId(data.getSiteid());
                 } else {
-                    BookmarkUtil.unsave(v.getContext(), data.getSiteid());
+                    bookmarkUtil.deleteSiteId(data.getSiteid());
                 }
             }
         });

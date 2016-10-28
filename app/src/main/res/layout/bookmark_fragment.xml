@@ -5,19 +5,27 @@
     <TextView
         android:id="@+id/summary"
         style="@style/TextAppearance.AppCompat.Small"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:singleLine="true"/>
 
-    <ListView
-        android:id="@+id/result"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/content_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/summary"/>
+        android:layout_below="@id/summary"
+        />
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/errorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

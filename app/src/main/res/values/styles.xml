@@ -11,10 +11,42 @@
         <item name="android:windowBackground">@android:color/white</item>
     </style>
 
+    <!--Actionbar-->
     <style name="AppTheme.Base.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
+    </style>
+
+    <!-- Card View -->
+    <style name="AppTheme.Base.Card" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="ShowcaseBigText">
+        <item name="android:textSize">22sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/theme_accent</item>
+    </style>
+
+    <style name="ShowcaseSmallText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/real_white</item>
+    </style>
+
+    <!--Showcase-->
+    <style name="ShowcaseTheme" parent="ShowcaseView">
+        <item name="sv_backgroundColor">@color/coach_background</item>
+        <item name="sv_titleTextAppearance">@style/ShowcaseBigText</item>
+        <item name="sv_detailTextAppearance">@style/ShowcaseSmallText</item>
+        <item name="sv_showcaseColor">@color/theme_accent</item>
     </style>
 
 </resources>

@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 A Weyoung App
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.weyoung.xianbicycle.utils;
 
 import android.app.Activity;
@@ -10,24 +25,24 @@ import com.baidu.navisdk.adapter.BNRoutePlanNode;
 import com.baidu.navisdk.adapter.BaiduNaviManager;
 
 import org.weyoung.xianbicycle.NavigatorActivity;
-import org.weyoung.xianbicycle.data.Place;
+import org.weyoung.xianbicycle.data.BicycleLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NavigationUtil {
     public static final String ROUTE_PLAN_NODE = "routePlanNode";
-    public static Place lastKnown;
+    public static BicycleLocation lastKnown;
 
     public static void updateLastKnown(BDLocation lastKnown) {
-        NavigationUtil.lastKnown = new Place(lastKnown.getLatitude(), lastKnown.getLongitude(), lastKnown.getAddrStr());
+        NavigationUtil.lastKnown = new BicycleLocation(lastKnown.getLatitude(), lastKnown.getLongitude(), lastKnown.getAddrStr());
     }
 
-    public static Place getLastKnown() {
+    public static BicycleLocation getLastKnown() {
         return lastKnown;
     }
 
-    public static void launchNavigator(final Activity activity, Place end) {
+    public static void launchNavigator(final Activity activity, BicycleLocation end) {
         if (lastKnown == null) {
             return;
         }

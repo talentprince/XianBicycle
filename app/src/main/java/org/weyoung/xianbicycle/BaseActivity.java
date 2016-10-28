@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 A Weyoung App
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.weyoung.xianbicycle;
 
 import android.os.Bundle;
@@ -13,6 +28,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+
+import org.weyoung.xianbicycle.utils.CoachUtil;
 
 import java.util.ArrayList;
 
@@ -70,6 +89,7 @@ public class BaseActivity extends AppCompatActivity {
 
     // Primary toolbar and drawer toggle
     private Toolbar mActionBarToolbar;
+    private ShowcaseView showcaseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +107,7 @@ public class BaseActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         getActionBarToolbar();
+        showcaseView = CoachUtil.showCoachMarkIfNecessary(this, getActionBarToolbar());
     }
 
     @Override
@@ -153,6 +174,9 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                if (showcaseView != null && showcaseView.isShowing()) {
+                    showcaseView.hide();
+                }
                 onNavDrawerStateChanged(true, false);
             }
 

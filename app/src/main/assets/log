@@ -2,6 +2,13 @@
 
 <p>该应用基于 <a href="http://xian-pub-bicycle.herokuapp.com/">公共自行车查询</a> 制作, 支持根据地点查询自行车租用情况, 在此感谢网站后台服务作者</p>
 
+<b>3.2更新日志 (20160428)</b>
+
+<p>1. 增加首次进入用户引导</p>
+<p>2. MVP重构代码结构</p>
+<p>3. 升级为NoSQL数据库</p>
+<p>4. 公开软件源码地址(见该页最后)</p>
+
 <b>3.1更新日志 (20160321)</b>
 
 <p>1. 修复由于坐标系转换导致无法根据位置搜索的问题</p>
@@ -33,3 +40,4 @@
 <b>意见与建议</b>
 
 <p>联系 <a href="mailto:talent_prince@163.com">我的邮箱</a></p>
+<p>程序源码 <a href="https://github.com/talentprince/XianBicycle">Github地址</a></p>

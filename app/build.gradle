@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "org.weyoung.xianbicycle"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "3.1"
+        versionCode 6
+        versionName "3.2"
         signingConfig signingConfigs.debug
     }
     buildTypes {
@@ -18,6 +19,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 
     signingConfigs {
@@ -56,12 +68,32 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+
+    compile 'io.reactivex:rxjava:1.1.2'
+    compile 'io.reactivex:rxandroid:1.1.0'
+
     compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.guava:guava:19.0'
+
     compile 'com.jakewharton:butterknife:7.0.1'
+
     compile 'com.anthonycr.grant:permissions:1.1.1'
+    compile 'com.couchbase.lite:couchbase-lite-android:1.1.0'
+
+    compile 'com.google.dagger:dagger:2.1'
+    apt 'com.google.dagger:dagger-compiler:2.1'
+
+    compile 'com.facebook.stetho:stetho:1.3.1'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
+    compile 'com.hannesdorfmann.mosby:viewstate:2.0.1'
 }

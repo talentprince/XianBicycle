@@ -1,55 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_height"
-                android:padding="@dimen/item_padding">
+<android.support.v7.widget.CardView
+    style="@style/AppTheme.Base.Card"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        tools:text="TestName"/>
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/distance"
-        android:layout_toRightOf="@+id/name"
-        android:textStyle="bold"
-        tools:text="(99/100)"/>
-
-    <TextView
-        android:id="@+id/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/bookmark"
-        android:textColor="@color/theme_accent"
-        tools:text="200m"/>
-
-    <TextView
-        android:id="@+id/location"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/bookmark"
-        android:layout_toLeftOf="@+id/bookmark"
-        android:gravity="bottom"
-        tools:text="Test Location"/>
+        android:minHeight="@dimen/item_height"
+        android:padding="@dimen/item_padding">
 
-    <ImageView
-        android:id="@+id/bookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:paddingBottom="@dimen/bookmark_padding_vertical"
-        android:paddingLeft="@dimen/bookmark_padding_left"
-        android:paddingRight="@dimen/bookmark_padding_right"
-        android:paddingTop="@dimen/bookmark_padding_vertical"
-        android:src="@drawable/ic_action_bookmark"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            tools:text="TestName"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/distance"
+            android:layout_toRightOf="@+id/name"
+            android:textStyle="bold"
+            tools:text="(99/100)"/>
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/bookmark"
+            android:textColor="@color/theme_accent"
+            tools:text="200m"/>
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/bookmark"
+            android:layout_toLeftOf="@+id/bookmark"
+            android:gravity="bottom"
+            tools:text="Test Location"/>
+
+        <ImageView
+            android:id="@+id/bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="@dimen/bookmark_padding_vertical"
+            android:paddingLeft="@dimen/bookmark_padding_left"
+            android:paddingRight="@dimen/bookmark_padding_right"
+            android:paddingTop="@dimen/bookmark_padding_vertical"
+            android:src="@drawable/ic_action_bookmark"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -5,7 +5,7 @@
     <string name="error">出错啦, 重新试试</string>
     <string name="no_result">查无结果</string>
     <string name="ur_location">您的位置:%1$s</string>
-    <string name="get_ur_location">定位中...</string>
+    <string name="get_ur_location">定位中…</string>
     <string name="action_about">关于</string>
     <string name="bookmark_number">您已收藏了%1$s个公共自行车站点</string>
     <string name="navdrawer_item_about">关于</string>
@@ -18,5 +18,7 @@
     <string name="permission_request_denied">抱歉, 百度LBS服务需要一些权限才能工作</string>
     <string name="result">(可租 %1$s,可还 %2$s)</string>
     <string name="hide">隐藏</string>
+    <string name="showcase_title">从这里把控您的绿色出行!</string>
+    <string name="showcase_button">开始吧~</string>
 
 </resources>

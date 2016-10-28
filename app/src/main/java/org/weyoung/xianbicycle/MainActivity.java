@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 A Weyoung App
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.weyoung.xianbicycle;
 
 import android.os.Build;
@@ -15,8 +30,8 @@ import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.ui.AboutFragment;
-import org.weyoung.xianbicycle.ui.BookmarkFragment;
-import org.weyoung.xianbicycle.ui.SearchFragment;
+import org.weyoung.xianbicycle.ui.bookmark.BookmarkFragment;
+import org.weyoung.xianbicycle.ui.search.SearchFragment;
 import org.weyoung.xianbicycle.utils.FileUtil;
 
 import java.util.Locale;
@@ -26,6 +41,7 @@ import butterknife.ButterKnife;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.READ_PHONE_STATE;
 
 
 public class MainActivity extends BaseActivity {
@@ -69,7 +85,8 @@ public class MainActivity extends BaseActivity {
     private void initBaiduNaviEngine() {
         PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
                 new String[]{ACCESS_FINE_LOCATION,
-                            ACCESS_COARSE_LOCATION}, new PermissionsResultAction() {
+                            ACCESS_COARSE_LOCATION,
+                            READ_PHONE_STATE}, new PermissionsResultAction() {
                     @Override
                     public void onGranted() {
                         BaiduNaviManager.getInstance().init(MainActivity.this, FileUtil.getSdcardDir(), APP_FOLDER_NAME, null, null);

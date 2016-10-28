@@ -6,7 +6,7 @@
     <string name="no_result">No Result</string>
     <string name="error">Error~Retrying</string>
     <string name="ur_location">Your Location:%1$s</string>
-    <string name="get_ur_location">Get Your Location...</string>
+    <string name="get_ur_location">Get Your Location…</string>
     <string name="version" translatable="false">A Weyoung App Version: %1$s</string>
     <string name="navdrawer_item_about">About</string>
     <string name="navdrawer_item_search">Search</string>
@@ -20,5 +20,7 @@
     <string name="permission_request_denied">Sorry, Baidu LBS service need those permissions</string>
     <string name="result">(%1$s Available,%2$s Empty)</string>
     <string name="hide">Hide</string>
+    <string name="showcase_title">Control you green travel from here!</string>
+    <string name="showcase_button">Let\'s begin~</string>
 
 </resources>
