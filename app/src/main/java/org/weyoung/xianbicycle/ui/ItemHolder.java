@@ -26,6 +26,8 @@ public class ItemHolder {
     TextView location;
     @Bind(R.id.bookmark)
     ImageView bookmark;
+    @Bind(R.id.distance)
+    TextView distance;
 
     public ItemHolder(View view) {
         context = view.getContext();
@@ -36,6 +38,12 @@ public class ItemHolder {
         name.setText(data.getSitename());
         status.setText(String.format(Locale.US, context.getString(R.string.result), getAvailableBike(data.getEmptynum(), data.getLocknum()), data.getEmptynum()));
         location.setText(data.getLocation());
+        if (data.getDistance() != null) {
+            distance.setVisibility(View.VISIBLE);
+            distance.setText(String.format(Locale.US, "%dm", data.getDistance().intValue()));
+        } else {
+            distance.setVisibility(View.INVISIBLE);
+        }
         boolean selected = bookmarkList.contains(data.getSiteid());
         setBookmark(selected);
         bookmark.setSelected(selected);

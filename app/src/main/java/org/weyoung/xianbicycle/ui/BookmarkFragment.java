@@ -1,6 +1,7 @@
 package org.weyoung.xianbicycle.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,15 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.tencent.stat.StatService;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleData;
 import org.weyoung.xianbicycle.data.Place;
-import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.data.Search;
+import org.weyoung.xianbicycle.net.Loader;
 import org.weyoung.xianbicycle.utils.BookmarkUtil;
 import org.weyoung.xianbicycle.utils.NavigationUtil;
 
@@ -61,7 +59,7 @@ public class BookmarkFragment extends Fragment {
     void onResultItemClick(int index) {
         BicycleData bicycleData = dataAdapter.getItem(index);
         if (NavigationUtil.getLastKnown() == null) {
-            Toast.makeText(getActivity(), R.string.get_ur_location, Toast.LENGTH_SHORT).show();
+            showMessage(R.string.get_ur_location);
             return;
         }
         NavigationUtil.launchNavigator(getActivity(),
@@ -86,8 +84,7 @@ public class BookmarkFragment extends Fragment {
         try {
             bookmark = BookmarkUtil.getAll(getActivity());
         } catch (Exception e) {
-            StatService.reportError(getActivity(), "refreshBookmark " + e.getMessage());
-            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+            showMessage(R.string.error);
             return;
         }
         summaryView.setText(String.format(Locale.US, getResources().getString(R.string.bookmark_number), bookmark.size()));
@@ -102,14 +99,13 @@ public class BookmarkFragment extends Fragment {
                 @Override
                 public void onLoaderFinished(List<BicycleData> data) {
                     if (data.size() == 0) {
-                        Toast.makeText(getActivity(), R.string.no_result, Toast.LENGTH_SHORT).show();
+                        showMessage(R.string.no_result);
                     } else {
                         try {
                             dataAdapter = new DataAdapter(getActivity(), data, BookmarkUtil.getAll(getActivity()));
                             resultView.setAdapter(dataAdapter);
                         } catch (Exception e) {
-                            StatService.reportError(getActivity(), "refreshBookmark onLoaderFinished " + e.getMessage());
-                            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                            showMessage(R.string.error);
                         }
                     }
                     hideProgress();
@@ -117,13 +113,25 @@ public class BookmarkFragment extends Fragment {
 
                 @Override
                 public void onLoaderFailed() {
-                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                    showMessage(R.string.error);
                     hideProgress();
                 }
             }).load(new Search(bookmark));
         } else if (dataAdapter != null){
             dataAdapter.clear();
             dataAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void showMessage(int messageId) {
+        if (isAdded()) {
+            final Snackbar snackbar =  Snackbar.make(getView(), getString(messageId), Snackbar.LENGTH_LONG);
+            snackbar.setAction(getString(R.string.hide), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    snackbar.dismiss();
+                }
+            }).show();
         }
     }
 

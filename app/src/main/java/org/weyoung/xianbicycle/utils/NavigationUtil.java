@@ -32,7 +32,7 @@ public class NavigationUtil {
             return;
         }
         final BNRoutePlanNode startPoint = new BNRoutePlanNode(lastKnown.getLon(), lastKnown.getLat(),
-                lastKnown.getName(), null, BNRoutePlanNode.CoordinateType.BD09LL);
+                lastKnown.getName(), null, BNRoutePlanNode.CoordinateType.GCJ02);
         BNRoutePlanNode endPoint = new BNRoutePlanNode(end.getLon(), end.getLat(),
                 end.getName(), null, BNRoutePlanNode.CoordinateType.BD09LL);
         List<BNRoutePlanNode> list = new ArrayList<>();

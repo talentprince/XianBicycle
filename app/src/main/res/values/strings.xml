@@ -19,5 +19,6 @@
     <string name="tips">Tap bicycle result will lead to a navigation ^_^</string>
     <string name="permission_request_denied">Sorry, Baidu LBS service need those permissions</string>
     <string name="result">(%1$s Available,%2$s Empty)</string>
+    <string name="hide">Hide</string>
 
 </resources>

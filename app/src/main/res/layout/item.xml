@@ -3,8 +3,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/item_padding"
-                android:minHeight="@dimen/item_height">
+                android:minHeight="@dimen/item_height"
+                android:padding="@dimen/item_padding">
 
     <TextView
         android:id="@+id/name"
@@ -15,33 +15,41 @@
 
     <TextView
         android:id="@+id/status"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/bookmark"
+        android:layout_toLeftOf="@+id/distance"
         android:layout_toRightOf="@+id/name"
+        android:textStyle="bold"
         tools:text="(99/100)"/>
 
     <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/bookmark"
+        android:textColor="@color/theme_accent"
+        tools:text="200m"/>
+
+    <TextView
         android:id="@+id/location"
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/bookmark"
         android:layout_toLeftOf="@+id/bookmark"
+        android:gravity="bottom"
         tools:text="Test Location"/>
 
     <ImageView
         android:id="@+id/bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_bookmark"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:paddingBottom="@dimen/bookmark_padding_vertical"
         android:paddingLeft="@dimen/bookmark_padding_left"
         android:paddingRight="@dimen/bookmark_padding_right"
         android:paddingTop="@dimen/bookmark_padding_vertical"
-        android:paddingBottom="@dimen/bookmark_padding_vertical"
-        android:layout_alignParentRight="true"/>
+        android:src="@drawable/ic_action_bookmark"/>
 
 </RelativeLayout>
