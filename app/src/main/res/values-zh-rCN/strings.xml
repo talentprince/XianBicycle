@@ -15,7 +15,7 @@
     <string name="route_plan_failed">路径规划失败啦</string>
     <string name="from_place">起点</string>
     <string name="tips">点击自行车查找结果可以进入导航页哦 ^_^</string>
-    <string name="permission_request_denied">抱歉, 百度LBS服务需要一些权限才能工作</string>
+    <string name="permission_request_denied">抱歉, 定位服务需要一些权限才能工作</string>
     <string name="result">(可租 %1$s,可还 %2$s)</string>
     <string name="hide">隐藏</string>
     <string name="showcase_title">从这里把控您的绿色出行!</string>

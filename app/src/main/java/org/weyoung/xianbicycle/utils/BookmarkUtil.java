@@ -44,7 +44,7 @@ import static com.google.common.collect.Maps.newHashMap;
 public class BookmarkUtil {
 
     private static final String DATABASE_NAME = "xianbicycle.db";
-    public static final String SITE_ID = "siteId";
+    private static final String SITE_ID = "siteId";
     private static final String VIEW_NAME = "viewById";
     private LiveQuery liveQuery;
     private Manager manager;
@@ -88,11 +88,11 @@ public class BookmarkUtil {
     }
 
     public void deleteSiteId(String id) {
-        Query query = view.createQuery();
-        query.setStartKey(id);
-        query.setEndKey(id);
-        query.setLimit(1);
         try {
+            Query query = view.createQuery();
+            query.setStartKey(id);
+            query.setEndKey(id);
+            query.setLimit(1);
             QueryEnumerator run = query.run();
             if (run.hasNext()) {
                 QueryRow next = run.next();
@@ -105,9 +105,9 @@ public class BookmarkUtil {
 
     public List<String> queryAllIds() {
         List<String> ids = newArrayList();
-        Query query = view.createQuery();
-        query.setDescending(true);
         try {
+            Query query = view.createQuery();
+            query.setDescending(true);
             QueryEnumerator run = query.run();
             for (Iterator<QueryRow> it = run; it.hasNext(); ) {
                 QueryRow next = it.next();
@@ -121,11 +121,11 @@ public class BookmarkUtil {
     }
 
     public boolean contains(String id) {
-        Query query = view.createQuery();
-        query.setStartKey(id);
-        query.setEndKey(id);
-        query.setLimit(1);
         try {
+            Query query = view.createQuery();
+            query.setStartKey(id);
+            query.setEndKey(id);
+            query.setLimit(1);
             QueryEnumerator run = query.run();
             return run.hasNext();
         } catch (Exception e) {

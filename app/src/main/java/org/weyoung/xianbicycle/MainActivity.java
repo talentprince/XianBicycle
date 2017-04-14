@@ -17,12 +17,10 @@ package org.weyoung.xianbicycle;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
 
-import com.anthonycr.grant.PermissionsManager;
 import com.tencent.stat.StatConfig;
 import com.tencent.stat.StatService;
 
@@ -37,8 +35,6 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity {
-    private static final String APP_FOLDER_NAME = "XianBicycle";
-
     @Bind(R.id.version)
     TextView version;
     private Fragment aboutFragment;
@@ -125,12 +121,5 @@ public class MainActivity extends BaseActivity {
             }
         }
         return fragment;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
     }
 }
