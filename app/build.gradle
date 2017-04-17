@@ -9,8 +9,8 @@ android {
         applicationId "org.weyoung.xianbicycle"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 9
-        versionName "3.3.2"
+        versionCode 10
+        versionName "3.4"
         signingConfig signingConfigs.debug
         multiDexEnabled true
     }
@@ -47,11 +47,11 @@ android {
 
     productFlavors {
         internal {
-            def gaode_api_key = '142590a5f1d9fe3e9cf62180a3fb7ed5'
+            def gaode_api_key = 'f00c79d96aca53168ff6f429b722c1d2'
             resValue 'string', 'gaode_api_key', gaode_api_key
         }
         production {
-            def gaode_api_key = '142590a5f1d9fe3e9cf62180a3fb7ed5'
+            def gaode_api_key = 'f00c79d96aca53168ff6f429b722c1d2'
             resValue 'string', 'gaode_api_key', gaode_api_key
         }
     }
