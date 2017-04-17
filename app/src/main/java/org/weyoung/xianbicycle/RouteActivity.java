@@ -17,144 +17,57 @@ package org.weyoung.xianbicycle;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Window;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnInfoWindowClickListener;
-import com.amap.api.maps.AMap.OnMapClickListener;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.overlay.WalkRouteOverlay;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.route.BusRouteResult;
-import com.amap.api.services.route.DriveRouteResult;
-import com.amap.api.services.route.RouteSearch;
-import com.amap.api.services.route.RouteSearch.OnRouteSearchListener;
-import com.amap.api.services.route.RouteSearch.WalkRouteQuery;
-import com.amap.api.services.route.WalkPath;
-import com.amap.api.services.route.WalkRouteResult;
+import com.amap.api.navi.AMapNavi;
+import com.amap.api.navi.AMapNaviListener;
+import com.amap.api.navi.AMapNaviView;
+import com.amap.api.navi.AMapNaviViewListener;
+import com.amap.api.navi.enums.NaviType;
+import com.amap.api.navi.model.AMapLaneInfo;
+import com.amap.api.navi.model.AMapNaviCameraInfo;
+import com.amap.api.navi.model.AMapNaviCross;
+import com.amap.api.navi.model.AMapNaviInfo;
+import com.amap.api.navi.model.AMapNaviLocation;
+import com.amap.api.navi.model.AMapNaviTrafficFacilityInfo;
+import com.amap.api.navi.model.AMapServiceAreaInfo;
+import com.amap.api.navi.model.AimLessModeCongestionInfo;
+import com.amap.api.navi.model.AimLessModeStat;
+import com.amap.api.navi.model.NaviInfo;
+import com.amap.api.navi.model.NaviLatLng;
+import com.autonavi.tbt.TrafficFacilityInfo;
 
 
-public class RouteActivity extends Activity implements OnMapClickListener,
-        OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
-    private AMap aMap;
-    private MapView mapView;
-    private RouteSearch mRouteSearch;
-    private WalkRouteResult mWalkRouteResult;
-    private LatLng mStartPoint = null;
-    private LatLng mEndPoint = null;
+public class RouteActivity extends Activity implements AMapNaviViewListener, AMapNaviListener {
+    private AMapNaviView mapView;
+    private NaviLatLng startPoint = null;
+    private NaviLatLng endPoint = null;
+    protected AMapNavi aMapNavi;
+
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_map);
 
-        mapView = (MapView) findViewById(R.id.mapview);
-        mapView.onCreate(bundle);
+        aMapNavi = AMapNavi.getInstance(getApplicationContext());
+        aMapNavi.addAMapNaviListener(this);
 
-        mStartPoint = getIntent().getParcelableExtra("start");
-        mEndPoint = getIntent().getParcelableExtra("end");
+        mapView = (AMapNaviView) findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.setAMapNaviViewListener(this);
 
-        initMapView();
-    }
-
-    private void setFromAndToMarker() {
-        aMap.addMarker(new MarkerOptions().position(mStartPoint)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.start)));
-        aMap.addMarker(new MarkerOptions().position(mEndPoint)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.end)));
-    }
-
-    private void initMapView() {
-        if (aMap == null) {
-            aMap = mapView.getMap();
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mStartPoint, 8));
-        }
-        registerListener();
-        mRouteSearch = new RouteSearch(this);
-        mRouteSearch.setRouteSearchListener(this);
-    }
-
-    private void registerListener() {
-        aMap.setOnMapClickListener(RouteActivity.this);
-        aMap.setOnMarkerClickListener(RouteActivity.this);
-        aMap.setOnInfoWindowClickListener(RouteActivity.this);
-        aMap.setInfoWindowAdapter(RouteActivity.this);
-    }
-
-    @Override
-    public View getInfoContents(Marker arg0) {
-        return null;
-    }
-
-    @Override
-    public View getInfoWindow(Marker arg0) {
-        return null;
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker arg0) {
-
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker arg0) {
-        return false;
-    }
-
-    @Override
-    public void onMapClick(LatLng arg0) {
-
-    }
-
-    public void searchRouteResult(int mode) {
-        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(new LatLonPoint(mStartPoint.latitude, mStartPoint.longitude),
-                new LatLonPoint(mEndPoint.latitude, mEndPoint.longitude));
-        WalkRouteQuery query = new WalkRouteQuery(fromAndTo, mode);
-        mRouteSearch.calculateWalkRouteAsyn(query);
-    }
-
-    @Override
-    public void onBusRouteSearched(BusRouteResult result, int errorCode) {
-    }
-
-    @Override
-    public void onDriveRouteSearched(DriveRouteResult result, int errorCode) {
-    }
-
-    @Override
-    public void onWalkRouteSearched(WalkRouteResult result, int errorCode) {
-        aMap.clear();
-        if (errorCode == 1000) {
-            if (result != null && result.getPaths() != null) {
-                if (result.getPaths().size() > 0) {
-                    setFromAndToMarker();
-                    mWalkRouteResult = result;
-                    final WalkPath walkPath = mWalkRouteResult.getPaths()
-                            .get(0);
-                    WalkRouteOverlay walkRouteOverlay = new WalkRouteOverlay(
-                            this, aMap, walkPath,
-                            mWalkRouteResult.getStartPos(),
-                            mWalkRouteResult.getTargetPos());
-                    walkRouteOverlay.removeFromMap();
-                    walkRouteOverlay.addToMap();
-                    walkRouteOverlay.zoomToSpan();
-                }
-            }
-        }
+        startPoint = getIntent().getParcelableExtra("start");
+        endPoint = getIntent().getParcelableExtra("end");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
-        searchRouteResult(RouteSearch.WalkDefault);
     }
 
     @Override
@@ -173,6 +86,203 @@ public class RouteActivity extends Activity implements OnMapClickListener,
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        aMapNavi.stopNavi();
+        aMapNavi.destroy();
     }
 
+    @Override
+    public void onInitNaviSuccess() {
+        aMapNavi.calculateWalkRoute(startPoint, endPoint);
+
+    }
+
+    @Override
+    public void onCalculateRouteSuccess() {
+        aMapNavi.startNavi(NaviType.GPS);
+    }
+
+    @Override
+    public void onNaviSetting() {
+
+    }
+
+    @Override
+    public void onNaviCancel() {
+        finish();
+    }
+
+    @Override
+    public boolean onNaviBackClick() {
+        return false;
+    }
+
+    @Override
+    public void onNaviMapMode(int i) {
+
+    }
+
+    @Override
+    public void onNaviTurnClick() {
+
+    }
+
+    @Override
+    public void onNextRoadClick() {
+
+    }
+
+    @Override
+    public void onScanViewButtonClick() {
+
+    }
+
+    @Override
+    public void onLockMap(boolean b) {
+
+    }
+
+    @Override
+    public void onNaviViewLoaded() {
+
+    }
+
+    @Override
+    public void onInitNaviFailure() {
+
+    }
+
+    @Override
+    public void onStartNavi(int i) {
+
+    }
+
+    @Override
+    public void onTrafficStatusUpdate() {
+
+    }
+
+    @Override
+    public void onLocationChange(AMapNaviLocation aMapNaviLocation) {
+
+    }
+
+    @Override
+    public void onGetNavigationText(int i, String s) {
+
+    }
+
+    @Override
+    public void onEndEmulatorNavi() {
+
+    }
+
+    @Override
+    public void onArriveDestination() {
+
+    }
+
+    @Override
+    public void onCalculateRouteFailure(int i) {
+
+    }
+
+    @Override
+    public void onReCalculateRouteForYaw() {
+
+    }
+
+    @Override
+    public void onReCalculateRouteForTrafficJam() {
+
+    }
+
+    @Override
+    public void onArrivedWayPoint(int i) {
+
+    }
+
+    @Override
+    public void onGpsOpenStatus(boolean b) {
+
+    }
+
+    @Override
+    public void onNaviInfoUpdate(NaviInfo naviInfo) {
+
+    }
+
+    @Override
+    public void onNaviInfoUpdated(AMapNaviInfo aMapNaviInfo) {
+
+    }
+
+    @Override
+    public void updateCameraInfo(AMapNaviCameraInfo[] aMapNaviCameraInfos) {
+
+    }
+
+    @Override
+    public void onServiceAreaUpdate(AMapServiceAreaInfo[] aMapServiceAreaInfos) {
+
+    }
+
+    @Override
+    public void showCross(AMapNaviCross aMapNaviCross) {
+
+    }
+
+    @Override
+    public void hideCross() {
+
+    }
+
+    @Override
+    public void showLaneInfo(AMapLaneInfo[] aMapLaneInfos, byte[] bytes, byte[] bytes1) {
+
+    }
+
+    @Override
+    public void hideLaneInfo() {
+
+    }
+
+    @Override
+    public void onCalculateMultipleRoutesSuccess(int[] ints) {
+
+    }
+
+    @Override
+    public void notifyParallelRoad(int i) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo aMapNaviTrafficFacilityInfo) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(AMapNaviTrafficFacilityInfo[] aMapNaviTrafficFacilityInfos) {
+
+    }
+
+    @Override
+    public void OnUpdateTrafficFacility(TrafficFacilityInfo trafficFacilityInfo) {
+
+    }
+
+    @Override
+    public void updateAimlessModeStatistics(AimLessModeStat aimLessModeStat) {
+
+    }
+
+    @Override
+    public void updateAimlessModeCongestionInfo(AimLessModeCongestionInfo aimLessModeCongestionInfo) {
+
+    }
+
+    @Override
+    public void onPlayRing(int i) {
+
+    }
 }
