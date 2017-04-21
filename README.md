@@ -20,7 +20,7 @@ see [ClickMe](https://github.com/JustinFeng/xian-pub-bicycle)
 [百度市场](http://shouji.baidu.com/software/11320962.html)
 [91市场](http://apk.91.com/Soft/Android/org.weyoung.xianbicycle-9.html)
 [安卓市场](http://apk.hiapk.com/appinfo/org.weyoung.xianbicycle)
-[小米市场]()
+[小米市场](http://app.mi.com/details?id=org.weyoung.xianbicycle&ref=search)
 
 ### License
 
