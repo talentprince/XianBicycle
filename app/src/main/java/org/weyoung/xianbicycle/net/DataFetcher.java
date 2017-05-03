@@ -27,25 +27,27 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.SingleTransformer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import rx.Observable;
-import rx.Single;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 class DataFetcher {
 
     public static final String URL = "http://xian-pub-bicycle.herokuapp.com/api?query=";
 
-    public Single.Transformer<SearchQuery, List<BicycleResult>> fetchData() {
-        return new Single.Transformer<SearchQuery, List<BicycleResult>>() {
+    public SingleTransformer<SearchQuery, List<BicycleResult>> fetchData() {
+        return new SingleTransformer<SearchQuery, List<BicycleResult>>() {
             @Override
-            public Single<List<BicycleResult>> call(Single<SearchQuery> searchQuerySingle) {
-                return searchQuerySingle.observeOn(Schedulers.io()).map(new Func1<SearchQuery, List<BicycleResult>>() {
+            public SingleSource<List<BicycleResult>> apply(@NonNull Single<SearchQuery> searchQuery) {
+                return searchQuery.observeOn(Schedulers.io()).map(new Function<SearchQuery, List<BicycleResult>>() {
                     @Override
-                    public List<BicycleResult> call(SearchQuery searchQuery) {
+                    public List<BicycleResult> apply(@NonNull SearchQuery searchQuery) throws Exception {
                         try {
                             String url = URL + URLEncoder.encode(new Gson().toJson(searchQuery), "utf-8");
                             Request request = new Request.Builder().get().url(url).build();
@@ -67,7 +69,6 @@ class DataFetcher {
                     }
                 });
             }
-
         };
     }
 }

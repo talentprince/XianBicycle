@@ -24,13 +24,13 @@ import android.webkit.WebView;
 
 import org.weyoung.xianbicycle.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AboutFragment extends Fragment{
     public static final String TAG = AboutFragment.class.getSimpleName();
 
-    @Bind(R.id.about)
+    @BindView(R.id.about)
     WebView about;
 
     @Override

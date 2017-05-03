@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,17 +43,17 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookmarkFragment extends MvpFragment<BookmarkView, BookmarkPresenter>
         implements RecyclerAdapter.ItemClickListener, BookmarkView{
     public static final String TAG = BookmarkFragment.class.getSimpleName();
-    @Bind(R.id.summary)
+    @BindView(R.id.summary)
     TextView summaryView;
-    @Bind(R.id.content_view)
+    @BindView(R.id.content_view)
     RecyclerView recyclerView;
-    @Bind(R.id.loading_view)
+    @BindView(R.id.loading_view)
     ProgressBar progressBar;
     private RecyclerAdapter recyclerAdapter;
 

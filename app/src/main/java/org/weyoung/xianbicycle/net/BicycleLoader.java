@@ -20,10 +20,12 @@ import org.weyoung.xianbicycle.data.SearchQuery;
 
 import java.util.List;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
-import static rx.Single.just;
+import static io.reactivex.Single.just;
+
 
 public class BicycleLoader {
     private Callback callback;
@@ -44,15 +46,17 @@ public class BicycleLoader {
         callback.onLoaderStarted();
         just(searchQuery).compose(new DataFetcher().fetchData())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<BicycleResult>>() {
+                .subscribe(new Consumer<List<BicycleResult>>() {
                     @Override
-                    public void call(List<BicycleResult> data) {
-                        callback.onLoaderFinished(data);
+                    public void accept(@NonNull List<BicycleResult> bicycleResults) throws Exception {
+                        callback.onLoaderFinished(bicycleResults);
+
                     }
-                }, new Action1<Throwable>() {
+                }, new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(@NonNull Throwable throwable) throws Exception {
                         callback.onLoaderFailed();
+
                     }
                 });
     }

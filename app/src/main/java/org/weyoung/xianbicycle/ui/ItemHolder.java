@@ -27,22 +27,22 @@ import org.weyoung.xianbicycle.utils.BookmarkUtil;
 
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ItemHolder extends RecyclerView.ViewHolder{
     private final BookmarkUtil bookmarkUtil;
     private Context context;
 
-    @Bind(R.id.name)
+    @BindView(R.id.name)
     TextView name;
-    @Bind(R.id.status)
+    @BindView(R.id.status)
     TextView status;
-    @Bind(R.id.location)
+    @BindView(R.id.location)
     TextView location;
-    @Bind(R.id.bookmark)
+    @BindView(R.id.bookmark)
     ImageView bookmark;
-    @Bind(R.id.distance)
+    @BindView(R.id.distance)
     TextView distance;
 
     public ItemHolder(View view, BookmarkUtil bookmarkUtil) {

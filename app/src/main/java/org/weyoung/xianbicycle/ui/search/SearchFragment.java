@@ -30,7 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,7 +52,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -60,13 +61,13 @@ public class SearchFragment extends MvpFragment<SearchView, SearchPresenter>
 implements SearchView, RecyclerAdapter.ItemClickListener{
     public static final String TAG = SearchFragment.class.getSimpleName();
 
-    @Bind(R.id.query)
+    @BindView(R.id.query)
     EditText queryView;
-    @Bind(R.id.content_view)
+    @BindView(R.id.content_view)
     RecyclerView recyclerView;
-    @Bind(R.id.loading_view)
+    @BindView(R.id.loading_view)
     ProgressBar progressBar;
-    @Bind(R.id.location)
+    @BindView(R.id.location)
     TextView locationHeader;
 
     @Inject
@@ -126,7 +127,13 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
     }
 
     private void initLocation() {
-        presenter.requestPermissionsIfNeeded(getContext());
+        new RxPermissions(getActivity()).request(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (true) {
+            presenter.initLocationClient();
+        } else {
+            showMessage(R.string.permission_request_denied);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -198,16 +205,6 @@ implements SearchView, RecyclerAdapter.ItemClickListener{
                 presenter.query(new SearchQuery(location.getLatitude(), location.getLongitude()));
             }
         }
-    }
-
-    @Override
-    public void onPermissionGranted() {
-        presenter.initLocationClient();
-    }
-
-    @Override
-    public void onPermissionDenied() {
-        showMessage(R.string.permission_request_denied);
     }
 
     //================================================================================

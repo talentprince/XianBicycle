@@ -30,16 +30,18 @@ import org.weyoung.xianbicycle.ui.search.SearchFragment;
 
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity {
-    @Bind(R.id.version)
-    TextView version;
+
     private Fragment aboutFragment;
     private Fragment searchFragment;
     private Fragment bookmarkFragment;
+
+    @BindView(R.id.version)
+    TextView version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,14 +15,11 @@
  */
 package org.weyoung.xianbicycle.ui.search;
 
-import android.content.Context;
-
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleResult;
@@ -30,11 +27,9 @@ import org.weyoung.xianbicycle.data.SearchQuery;
 import org.weyoung.xianbicycle.net.BicycleLoader;
 
 import java.util.List;
-import java.util.jar.Manifest;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
 
 public class SearchPresenter extends MvpBasePresenter<SearchView>{
     @Inject
@@ -111,19 +106,4 @@ public class SearchPresenter extends MvpBasePresenter<SearchView>{
         }
     }
 
-    public void requestPermissionsIfNeeded(Context context) {
-        RxPermissions.getInstance(context).request(android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION).subscribe(new Action1<Boolean>() {
-            @Override
-            public void call(Boolean aBoolean) {
-                if (isViewAttached()) {
-                    if (aBoolean) {
-                        getView().onPermissionGranted();
-                    } else {
-                        getView().onPermissionDenied();
-                    }
-                }
-            }
-        });
-    }
 }

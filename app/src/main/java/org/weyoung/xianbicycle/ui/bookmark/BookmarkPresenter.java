@@ -15,7 +15,7 @@
  */
 package org.weyoung.xianbicycle.ui.bookmark;
 
-import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
 import org.weyoung.xianbicycle.R;
 import org.weyoung.xianbicycle.data.BicycleResult;

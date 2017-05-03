@@ -16,7 +16,7 @@
 package org.weyoung.xianbicycle.ui.search;
 
 import com.amap.api.location.AMapLocation;
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby3.mvp.MvpView;
 
 import org.weyoung.xianbicycle.data.BicycleResult;
 
@@ -30,6 +30,4 @@ interface SearchView extends MvpView {
     void showLoading();
     void showContent();
     void setData(List<BicycleResult> data);
-    void onPermissionGranted();
-    void onPermissionDenied();
 }
